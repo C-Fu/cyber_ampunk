@@ -63,7 +63,7 @@ Plans:
 - [x] 02-01-PLAN.md — Header BM|EN pill + Tetapan language row with persistence (tracer: activation path)
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 02-02-PLAN.md — KL intro story dictionaries + overlay syncText (owner-review checkpoint)
+- [x] 02-02-PLAN.md — KL intro story dictionaries + overlay syncText (owner replaced story; credits auto-scroll; fork URL identity)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 02-03-PLAN.md — Language hint toast (trigger/dismiss/persist) wired after revealAppUi

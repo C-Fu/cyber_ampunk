@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 2
 current_phase_name: Language Toggle & KL Intro Story
 status: executing
-stopped_at: Phase 2 plan 02-01 complete — next wave 02-02
-last_updated: "2026-11-22T20:24:21.000Z"
+stopped_at: Phase 2 plan 02-02 complete — next wave 02-03
+last_updated: "2026-11-23T00:00:00.000Z"
 last_activity: 2026-11-23
-last_activity_desc: Plan 02-01 executed — header BM|EN pill + Tetapan language row live with persistence
-state_head: eb7c83443210ae0a094a2f925ea246c642a9dab7
+last_activity_desc: Plan 02-02 executed — owner story rewrite + credits auto-scroll + fork URL identity
+state_head: 3cad8f6
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
-  percent: 29
+  completed_plans: 6
+  percent: 34
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-11-22)
 ## Current Position
 
 Phase: 2 (Language Toggle & KL Intro Story) — EXECUTING
-Plan: 02-01 complete — next wave: 02-02 (KL intro story)
-Status: Ready to execute 02-02
-Last activity: 2026-11-23 — Plan 02-01 executed (header pill + settings row + persistence, 9min)
+Plan: 02-02 complete — next wave: 02-03 (language hint toast)
+Status: Ready to execute 02-03
+Last activity: 2026-11-23 — Plan 02-02 executed (owner story l01..l49 + credits auto-scroll + fork URL identity)
 
-Progress: [██▒░░░░░░░] 29%
+Progress: [███░░░░░░░] 34%
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Progress: [██▒░░░░░░░] 29%
 | Phase 01 P03 | 9min | 3 tasks | 6 files |
 | Phase 01 P04 | ~25 min | 3 tasks | 5 files |
 | Phase 02 P01 | 9min | 3 tasks | 6 files |
+| Phase 02 P02 | ~20min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ Recent decisions affecting current work:
 - [Phase 02]: persist-first toggle pattern (02-01): UI layer calls setStoredLanguage(next) BEFORE setLanguage(next) — setLanguage never persists; toast (02-03) must copy this
 - [Phase 02]: BM/EN segment labels hardcoded literals (T-5), never dictionary keys — only aria-labels/aria-pressed re-sync via syncText; getLanguage() is the single state source on both toggle surfaces (TG-8)
 - [Phase 02]: 02-01 grep baselines: lang-toggle-segment=4, setStoredLanguage=2 per file, aria-pressed=6, innerHTML-t()=0 both files, dictionary parity 86 keys
+- [Phase 02]: 02-02 owner replaced the story entirely (D-07) — intro.story.l01..l49 per-line keys, parity 135; ST-4 char budget owner-override dead; "slowly scroll up" = 100s linear CSS credits scroll with restart on language switch; prefers-reduced-motion disables it (first reduced-motion pattern in codebase)
+- [Phase 02]: 02-02 fork identity — SOURCE_CODE_URL + index.html head/JSON-LD -> c-fu.github.io/cyberpunk-malaya; vite base "/cyberpunk-malaya/" (dist must be served under that prefix or via vite preview); GitHub Pages not yet enabled — owner action
 
 ### Pending Todos
 
@@ -105,6 +108,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-22T20:24:21.000Z
-Stopped at: Phase 2 plan 02-01 complete — next wave 02-02
-Resume file: .planning/phases/02-language-toggle-kl-intro-story/02-02-PLAN.md
+Last session: 2026-11-23T00:00:00.000Z
+Stopped at: Phase 2 plan 02-02 complete — next wave 02-03
+Resume file: .planning/phases/02-language-toggle-kl-intro-story/02-03-PLAN.md
