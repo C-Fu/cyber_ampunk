@@ -42,6 +42,7 @@ import {
 } from "./platform/performanceProfile.js";
 import { getStoredLookPreset, isDevelopmentModeEnabled } from "./platform/userPreferences.js";
 import { applyStaticHead } from "./i18n/staticHead.js";
+import { t } from "./i18n/i18n.js";
 import {
   DEFAULT_LOOK_PRESET,
   LOOK_PRESETS,
@@ -50,7 +51,7 @@ import {
 const loader = createLoaderOverlay();
 
 init(loader).catch((error) => {
-  loader.fail("Failed to load. Check the console for details.");
+  loader.fail();
   console.error("Failed to initialize scene:", error);
 });
 
@@ -61,19 +62,19 @@ async function init(loaderOverlay) {
   applyStaticHead();
 
   loaderOverlay.setProgress(0.03);
-  loaderOverlay.setStatus("BOOTING SCENE");
+  loaderOverlay.setStatus(t("loader.bootingScene"));
 
   const camera = createCamera();
   const sceneResult = createScene();
   const { scene, sunLight } = sceneResult;
 
   loaderOverlay.setProgress(0.1);
-  loaderOverlay.setStatus("SPINNING UP RENDERER");
+  loaderOverlay.setStatus(t("loader.spinningRenderer"));
 
   const { renderer } = await createRenderer();
 
   loaderOverlay.setProgress(0.2);
-  loaderOverlay.setStatus("LINKING WEBGPU");
+  loaderOverlay.setStatus(t("loader.linkingWebgpu"));
 
   const { requestShadowMapUpdate } = createShadowUpdater({
     renderer,
@@ -110,7 +111,7 @@ async function init(loaderOverlay) {
   );
 
   loaderOverlay.setProgress(0.85);
-  loaderOverlay.setStatus("WIRING POST FX");
+  loaderOverlay.setStatus(t("loader.wiringPostFx"));
 
   const pipeline = createPostProcessing(renderer, scene, camera, {
     rain: world.rain,

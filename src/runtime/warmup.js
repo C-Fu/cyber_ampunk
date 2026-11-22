@@ -9,6 +9,7 @@
  */
 
 import { collectCollisionHideObjects } from "../world/weather/collisionHideObjects.js";
+import { t } from "../i18n/i18n.js";
 
 function collectDeferredObjects(world) {
   const objects = [];
@@ -84,7 +85,7 @@ export async function finalizeStartupLighting({
   post,
 }) {
   loaderOverlay.setProgress(0.88);
-  loaderOverlay.setStatus("SYNCING LIGHTS");
+  loaderOverlay.setStatus(t("loader.syncingLights"));
 
   syncLighting();
   requestShadowMapUpdate?.("startup-lighting");
@@ -94,7 +95,7 @@ export async function finalizeStartupLighting({
 
   // Assets are in — show 100% and a phase label while shaders compile (can take seconds).
   loaderOverlay.setProgress(1);
-  loaderOverlay.setStatus("ASSEMBLING SECTOR");
+  loaderOverlay.setStatus(t("loader.assemblingSector"));
   world.ground?.syncReflectionSize?.(renderer);
 
   // Hide rain / smoke / planes so beauty compile only builds core pipelines.

@@ -12,6 +12,7 @@ import { createFlyingPlanes } from "./effects/createFlyingPlanes.js";
 import { createCloudSky } from "../clouds/createCloudSky.js";
 import { FEATURES } from "./features.js";
 import { performanceProfile } from "../platform/performanceProfile.js";
+import { t } from "../i18n/i18n.js";
 import * as THREE from "three/webgpu";
 
 function buildColliders({ city, boundsCollider, carCollider }) {
@@ -62,7 +63,7 @@ export async function createWorld({
   requestShadowMapUpdate,
 }) {
   loaderOverlay.setProgress(0.35);
-  loaderOverlay.setStatus("STREAMING MESHES");
+  loaderOverlay.setStatus(t("loader.streamingMeshes"));
 
   const loadTasks = [];
 
@@ -95,7 +96,7 @@ export async function createWorld({
   const carSurfaceRain = quadra?.surfaceRain ?? null;
 
   loaderOverlay.setProgress(0.7);
-  loaderOverlay.setStatus("WIRING WORLD");
+  loaderOverlay.setStatus(t("loader.wiringWorld"));
 
   if (city) {
     addModel(scene, city);

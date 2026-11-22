@@ -4,6 +4,19 @@
  * the owner reviews and corrects wording here.
  */
 export const bm = {
+  "loader.ariaLoading": "Memuatkan {percent}%. {status}",
+  "loader.ariaLoadingInitial": "Memuatkan",
+  "loader.ariaPercent": "Memuatkan {percent}%",
+  "loader.assemblingSector": "MERAKIT SEKTOR",
+  "loader.bootingScene": "MENYALAKAN BABAK",
+  "loader.failedToLoad": "Gagal dimuatkan",
+  "loader.linkingWebgpu": "MENYAMBUNG WEBGPU",
+  "loader.linkFailed": "SAMBUKAN GAGAL",
+  "loader.spinningRenderer": "MEMUTAR PENJANA",
+  "loader.streamingMeshes": "MENTRANSMISI JARING",
+  "loader.syncingLights": "MENYELARASKAN CAHAYA",
+  "loader.wiringPostFx": "MENYAMBUNG POST FX",
+  "loader.wiringWorld": "MENYAMBUNG DUNIA",
   "meta.description": "Jelajahi lorong siberpunk selepas hujan dengan WebGPU dan Three.js. Pantulan neon, hujan sinematik, dan kesan pasca masa nyata oleh Anderson Mancini dan Sunag.",
   "meta.metaTitle": "Cyberpunk Malaya - Adegan hujan siberpunk oleh Anderson Mancini dan Sunag",
   "meta.ogDescription": "Jelajahi lorong siberpunk hujan dengan WebGPU dan Three.js. Pantulan neon, hujan sinematik dan pasca-pemprosesan masa nyata dalam adegan bandar malam.",

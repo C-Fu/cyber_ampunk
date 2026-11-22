@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import { t } from "../i18n/i18n.js";
 
 const LOADER_STYLE_ID = "app-loader-style";
 const CIRCLE_RADIUS = 66;
@@ -148,7 +149,7 @@ export function createLoaderOverlay() {
   root.id = "app-loader";
   root.setAttribute("role", "status");
   root.setAttribute("aria-busy", "true");
-  root.setAttribute("aria-label", "Loading");
+  root.setAttribute("aria-label", t("loader.ariaLoadingInitial"));
   root.innerHTML = `
     <div class="app-loader__stack">
       <div class="app-loader__stage">
@@ -174,20 +175,18 @@ export function createLoaderOverlay() {
   document.body.appendChild(root);
 
   function syncAriaLabel() {
+    const percent = Math.round(currentProgress * 100);
     if (currentStatus) {
       root.setAttribute(
         "aria-label",
         currentProgress >= 1
           ? currentStatus
-          : `Loading ${Math.round(currentProgress * 100)}%. ${currentStatus}`,
+          : t("loader.ariaLoading", { percent, status: currentStatus }),
       );
       return;
     }
 
-    root.setAttribute(
-      "aria-label",
-      `Loading ${Math.round(currentProgress * 100)}%`,
-    );
+    root.setAttribute("aria-label", t("loader.ariaPercent", { percent }));
   }
 
   function setProgress(progress) {
@@ -217,8 +216,8 @@ export function createLoaderOverlay() {
 
   function fail() {
     setProgress(1);
-    setStatus("LINK FAILED");
-    root.setAttribute("aria-label", "Failed to load");
+    setStatus(t("loader.linkFailed"));
+    root.setAttribute("aria-label", t("loader.failedToLoad"));
   }
 
   function finish({ onRevealUpdate } = {}) {
