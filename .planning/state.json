@@ -1,0 +1,33 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "i18n Foundation",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Language Toggle & KL Intro Story",
+      "status": "pending"
+    },
+    {
+      "number": "3",
+      "name": "Malay TTS Narration",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "Guaranteed Narration Asset",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "$gsd-progress --next",
+    "label": "Advance to the next step",
+    "reason": "Phase 2 of 4 · 25% · executing"
+  },
+  "updated_at": "2026-11-22T20:19:56.573Z"
+}
