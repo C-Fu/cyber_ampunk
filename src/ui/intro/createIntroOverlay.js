@@ -1,6 +1,7 @@
 import "./introOverlay.css";
 import gsap from "gsap";
 import { t, subscribe } from "../../i18n/i18n.js";
+import { phosphorArrowCounterClockwise } from "../core/phosphorIcons.js";
 
 // Per-line keys — the owner's full-length BM story verbatim (D-07), one key
 // per non-empty line (l01..l49). Phase 3 TTS narration source (D-06). Each
@@ -28,6 +29,7 @@ export function createIntroOverlay({
   onStart,
   onExited,
   onLanguageSwitchDuringPlayback,
+  onReplay,
 } = {}) {
   const root = document.createElement("div");
   root.className = "intro-container";
@@ -43,14 +45,18 @@ export function createIntroOverlay({
       <div class="intro-story" aria-live="off">
         <div class="intro-story-scroll"></div>
       </div>
+      <p class="intro-source-label" aria-live="off"></p>
       <div class="intro-actions">
         <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
+        <button type="button" class="intro-replay-button" aria-label="${t("intro.voice.replay")}" disabled>${phosphorArrowCounterClockwise}</button>
       </div>
       <p class="intro-credit">Adri 'C-Fu'</p>
     </div>
   `;
 
   const button = root.querySelector(".intro-button");
+  const replayButton = root.querySelector(".intro-replay-button");
+  const sourceLabel = root.querySelector(".intro-source-label");
   const kicker = root.querySelector(".intro-kicker");
   const brandLines = [...root.querySelectorAll(".intro-brand-line")];
   const rule = root.querySelector(".intro-rule");
@@ -70,6 +76,57 @@ export function createIntroOverlay({
   // an array at render time so the narration highlight can rebind after any
   // rebuild (HL-4).
   const storyLineEls = [];
+
+  // SL-2/SL-4: three-state narration source enum; the label re-derives from
+  // language AND source state on every syncText (SL-4). "idle" pre-ENTER
+  // renders empty but keeps the element's space (H-2 zero-reflow).
+  let narrationSource = "idle"; // "idle" | "asset" | "fallback" | "unavailable"
+  let narrationMuted = false;
+
+  const SOURCE_LABEL_KEYS = {
+    asset: "intro.voice.sourceAsset",
+    fallback: "intro.voice.sourceTts",
+    unavailable: "intro.voice.sourceNone",
+  };
+
+  function renderSourceLabel() {
+    const key = SOURCE_LABEL_KEYS[narrationSource];
+    sourceLabel.textContent = key ? t(key) : "";
+    // SL-3: cyan only in the unavailable state (the one degraded moment).
+    // MU-2: muted dims the label to the quiet state.
+    sourceLabel.classList.toggle(
+      "intro-source-label--unavailable",
+      narrationSource === "unavailable",
+    );
+    sourceLabel.classList.toggle("intro-source-label--muted", narrationMuted);
+  }
+
+  // R-1/MU-3: replay disabled-quiet (opacity 0.4) while muted, finished, or
+  // fallback-failed; enabled while narration is running. Never shows broken.
+  function renderReplayState() {
+    const canReplay =
+      !narrationMuted &&
+      narrationSource !== "idle" &&
+      narrationSource !== "unavailable";
+    replayButton.disabled = !canReplay;
+  }
+
+  // setNarrationSource from the narration module's onSourceChange callback
+  // (Task 1 wiring); null index onLineChange also arrives via highlight.
+  function setNarrationSource(source, { muted = narrationMuted } = {}) {
+    narrationSource = source;
+    if (muted !== undefined) {
+      narrationMuted = muted;
+    }
+    renderSourceLabel();
+    renderReplayState();
+  }
+
+  function setNarrationMuted(muted) {
+    narrationMuted = muted;
+    renderSourceLabel();
+    renderReplayState();
+  }
 
   function renderStory() {
     storyScroll.textContent = "";
@@ -104,6 +161,11 @@ export function createIntroOverlay({
     kicker.textContent = t("intro.kicker");
     renderStory();
     button.textContent = t("intro.enter");
+    // SL-4: label + aria re-derive from language and source state.
+    renderSourceLabel();
+    if (narrationSource !== "idle") {
+      replayButton.setAttribute("aria-label", t("intro.voice.replay"));
+    }
     // Language switch during playback stops narration and clears the
     // highlight (Pitfall 6 — no EN audio exists per D-02, simplest correct
     // behavior). Rebind the highlight targets after the rebuild (HL-4).
@@ -171,6 +233,8 @@ export function createIntroOverlay({
   gsap.set(rule, { scaleX: 0, opacity: 0 });
   gsap.set(story, { opacity: 0, y: 14 });
   gsap.set(button, { opacity: 0, y: 10 });
+  gsap.set(replayButton, { opacity: 0, y: 10 });
+  gsap.set(sourceLabel, { opacity: 0 });
   gsap.set(credit, { opacity: 0, y: 8 });
 
   function playEnter() {
@@ -232,6 +296,27 @@ export function createIntroOverlay({
         "-=0.25",
       )
       .to(
+        replayButton,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.45",
+      )
+      .to(
+        sourceLabel,
+        {
+          // SL-1 idle: present but quiet — animated in to 0.45, then the
+          // state classes govern opacity from there.
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+        },
+        "-=0.4",
+      )
+      .to(
         credit,
         {
           opacity: 1,
@@ -262,6 +347,7 @@ export function createIntroOverlay({
           .to(rule, { opacity: 0, duration, ease: "power1.out" }, 0)
           .to(button, { opacity: 0, duration, ease: "power1.out" }, 0)
           .to(credit, { opacity: 0, duration, ease: "power1.out" }, 0);
+        // Story window, replay button, and source label persist (RP-1/SL-1).
         return;
       }
       exitTween = gsap.to(root, {
@@ -299,6 +385,19 @@ export function createIntroOverlay({
 
   button.addEventListener("click", handleStart);
 
+  function handleReplayClick() {
+    if (replayButton.disabled) {
+      return;
+    }
+    // RP-4: restart from l01 — highlight resets to line 1 in the same frame
+    // (the narration module's onLineChange drives it) and the scroll
+    // restarts via restartStoryScroll.
+    restartStoryScroll();
+    onReplay?.();
+  }
+
+  replayButton.addEventListener("click", handleReplayClick);
+
   return {
     root,
     playEnter,
@@ -306,10 +405,13 @@ export function createIntroOverlay({
     setStoryHighlight,
     rebindStoryHighlight,
     setScrollDuration,
+    setNarrationSource,
+    setNarrationMuted,
     destroy() {
       enterTween?.kill();
       exitTween?.kill();
       button.removeEventListener("click", handleStart);
+      replayButton.removeEventListener("click", handleReplayClick);
       root.remove();
     },
   };

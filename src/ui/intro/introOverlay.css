@@ -184,7 +184,9 @@
 
 .intro-actions {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 12px;
 }
 
 .intro-button {
@@ -238,6 +240,100 @@
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
   white-space: nowrap;
+}
+
+/* SL-1: narration-source label — a whisper of metadata under the story
+   window. Always rendered (opacity swap, never display swap — H-2
+   zero-reflow); idle color rgba(255, 255, 255, 0.45). */
+.intro-source-label {
+  margin: 0.5rem 0 0.6rem;
+  min-height: 1em;
+  align-self: center;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 500;
+  font-size: clamp(0.62rem, 1.2vw, 0.68rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.45);
+  transition:
+    opacity 0.3s ease,
+    color 0.3s ease;
+}
+
+/* SL-3: the one degraded state allowed cyan — asset + TTS both failed. */
+.intro-source-label--unavailable {
+  color: var(--cyber-text);
+  opacity: 0.6;
+}
+
+/* MU-2: muted dims the label to the quiet state. */
+.intro-source-label--muted {
+  opacity: 0.4;
+}
+
+/* R-1: replay button — .intro-button glass family shrunk to a 44px circular
+   icon button (RP-1: sibling AFTER ENTER in .intro-actions). */
+.intro-replay-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: 999px;
+  background: rgba(8, 10, 16, 0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ffffff;
+  cursor: pointer;
+  pointer-events: all;
+  transition:
+    transform 0.35s ease,
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.intro-replay-button .ph-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* RP-3 keyboard focus — TG-4 treatment verbatim. */
+.intro-replay-button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+/* R-1 hover — .intro-button:hover trio translated to icon scale, cyan glow. */
+.intro-replay-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffffff;
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(34, 211, 238, 0.25);
+}
+
+.intro-replay-button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* R-1/MU-3: disabled-quiet — never broken, only quiet. */
+.intro-replay-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .intro-replay-button {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 @media (max-width: 480px) {

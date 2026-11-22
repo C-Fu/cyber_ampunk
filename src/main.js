@@ -48,6 +48,7 @@ import { getStoredLookPreset, isDevelopmentModeEnabled } from "./platform/userPr
 import { applyStaticHead } from "./i18n/staticHead.js";
 import { t } from "./i18n/i18n.js";
 import { createIntroNarration } from "./audio/createIntroNarration.js";
+import { subscribe } from "./audio/audioState.js";
 import {
   DEFAULT_LOOK_PRESET,
   LOOK_PRESETS,
@@ -257,7 +258,7 @@ async function init(loaderOverlay) {
   );
   const narrationCue = await loadNarrationCue();
 
-  // Returns the gesture-anchored start function for the given overlay;
+  // Returns the gesture-anchored narration handle for the given overlay;
   // also applies the cue-driven scroll duration once, at setup time.
   function setupNarration(introOverlay) {
     const narration = createIntroNarration({
@@ -267,11 +268,18 @@ async function init(loaderOverlay) {
       cueDurations: narrationCue?.cue ?? null,
       onLineChange: (index) => introOverlay.setStoryHighlight(index),
       onFinish: () => {},
-      onSourceChange: () => {},
+      // TTS-04: label state machine — bundled / device TTS / unavailable.
+      onSourceChange: (source) => introOverlay.setNarrationSource(source),
     });
     if (narrationCue?.total) {
       introOverlay.setScrollDuration(narrationCue.total);
     }
+    // MU-2: mute dims the label and disables replay (R-1/MU-3). One-way
+    // read of audioState — narration never writes music state (TTS-03).
+    const unsubscribeMute = subscribe(({ isMusicPlaying }) => {
+      introOverlay.setNarrationMuted(!isMusicPlaying);
+    });
+    narration._unsubscribeMute = unsubscribeMute;
     return {
       start: () => narration.start(),
       stop: () => narration.stop(),

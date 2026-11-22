@@ -76,6 +76,11 @@ export function createIntroFlow({
       onLanguageSwitchDuringPlayback: () => {
         narrationStop?.();
       },
+      // RP-4/TTS-06: replay restarts narration from l01 — the overlay
+      // already reset the highlight scroll in the same frame.
+      onReplay: () => {
+        narrationHandle?.restart();
+      },
     });
 
     // main.js builds the narration factory against THIS overlay and
