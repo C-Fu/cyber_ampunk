@@ -29,7 +29,7 @@ export function createAboutPanel({ state } = {}) {
         <div class="about-brand">
           <!-- Brand name threejs-punk stays hardcoded in both languages (Pitfall 3). -->
           <p class="about-brand-title">THREEJS-PUNK</p>
-          <small class="about-brand-subtitle">BY ANDERSON MANCINI &amp; SUNAG</small>
+          <small class="about-brand-subtitle">BY ADRI 'C-FU'</small>
         </div>
         <div class="about-copy">
           <div class="about-copy-col">
@@ -53,18 +53,15 @@ export function createAboutPanel({ state } = {}) {
 
       <div class="about-footer">
         <div class="about-buttons">
-          <button type="button" class="refresh-button-panel about-link-anderson">
-            Anderson Mancini
-          </button>
-          <button type="button" class="refresh-button-panel about-link-sunag">
-            Sunag
+          <button type="button" class="refresh-button-panel about-link-author">
+            Adri 'C-Fu'
           </button>
           <button type="button" class="refresh-button-panel about-link-source" data-i18n="about.sourceLink">
             ${t("about.sourceLink")}
           </button>
         </div>
         <p class="about-model-credits">
-          By Anderson Mancini &amp; Sunag
+          By Adri 'C-Fu'
         </p>
         <p class="about-recommended about-recommended--desktop">
           <span class="about-recommended-title" data-i18n="about.recommendedTitle">${t("about.recommendedTitle")}</span>
@@ -79,8 +76,7 @@ export function createAboutPanel({ state } = {}) {
   `;
 
   const closeButton = root.querySelector(".close-button-panel");
-  const andersonButton = root.querySelector(".about-link-anderson");
-  const sunagButton = root.querySelector(".about-link-sunag");
+  const authorButton = root.querySelector(".about-link-author");
   const sourceButton = root.querySelector(".about-link-source");
   const desktopRecommended = root.querySelector(".about-recommended--desktop");
   const mobileRecommended = root.querySelector(".about-recommended--mobile");
@@ -121,12 +117,8 @@ export function createAboutPanel({ state } = {}) {
 
   closeButton.addEventListener("click", close);
 
-  andersonButton.addEventListener("click", () => {
-    window.open("https://andersonmancini.dev", "_blank", "noopener,noreferrer");
-  });
-
-  sunagButton.addEventListener("click", () => {
-    window.open("https://x.com/sea3dformat", "_blank", "noopener,noreferrer");
+  authorButton.addEventListener("click", () => {
+    window.open("https://github.com/C-Fu", "_blank", "noopener,noreferrer");
   });
 
   sourceButton.addEventListener("click", () => {

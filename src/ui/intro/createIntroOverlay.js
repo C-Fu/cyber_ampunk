@@ -33,7 +33,7 @@ export function createIntroOverlay({ onStart } = {}) {
       <div class="intro-actions">
         <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
       </div>
-      <p class="intro-credit">Anderson Mancini · Sunag</p>
+      <p class="intro-credit">Adri 'C-Fu'</p>
     </div>
   `;
 
