@@ -9,8 +9,8 @@ last_mapped_at: 2026-11-22
 ## Test Framework
 
 **Runner:**
-- None. No test framework exists in this project. There is no `jest.config.*`, `vitest.config.*`, or any `*.test.*` / `*.spec.*` file anywhere in the repository.
-- `package.json` (`package.json`) contains only: `dev` (vite), `build` (vite build), `preview` (vite preview), `deploy` (vercel --prod). No `test` script.
+- None. No test framework exists in this project. There is no `jest.config.*`, `vitest.config.*`, or any `*.test.*` / `*.spec.*` file anywhere in the repository. (Exception: `scripts/check-i18n-parity.mjs` — a Node-native ESM script, not a framework test.)
+- `package.json` (`package.json`) contains only: `dev` (vite), `build` (vite build), `check:i18n` (node scripts/check-i18n-parity.mjs), `preview` (vite preview), `deploy` (vercel --prod). No `test` script.
 - Dev dependencies are only `vite` and `@vitejs/plugin-basic-ssl` — no test runner installed.
 
 **Assertion Library:**
@@ -18,7 +18,8 @@ last_mapped_at: 2026-11-22
 
 **Run Commands:**
 ```bash
-npm run build          # Only automated verification gate (type-free bundle build)
+npm run build          # Primary automated verification gate (type-free bundle build)
+npm run check:i18n     # BM/EN dictionary key-set parity gate (LANG-03), exits 1 on mismatch
 npm run dev            # Manual verification (HTTPS dev server, WebGPU context)
 npm run preview        # Manual verification of production build
 ```

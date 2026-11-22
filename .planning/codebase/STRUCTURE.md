@@ -35,6 +35,7 @@ cyberpunk-malaya/
 │   ├── controls/         # Walk controls (BVH collision)
 │   ├── debug/            # Dev API, inspector session, perf devtools
 │   ├── intro/            # Rain-glass intro effect (TSL-driven)
+│   ├── i18n/             # Bilingual dictionary store + dictionaries/ + staticHead head swap
 │   ├── platform/         # Device detection, perf profile, adaptive DPR, user prefs
 │   ├── post/             # RenderPipeline + look presets (post/look/)
 │   ├── runtime/          # Render loop, camera director, warmup
@@ -54,6 +55,12 @@ cyberpunk-malaya/
 - Purpose: app-lifecycle shells that aggregate other layers
 - Contains: `createAppShell.js` (all UI chrome + audio wiring), `createIntroFlow.js` (boot → intro → reveal sequence), `createLoaderOverlay.js` (progress UI)
 - Key files: `src/app/createAppShell.js`
+
+**`src/i18n/`:**
+- Purpose: hand-rolled BM/EN localization layer (zero dependencies)
+- Contains: `i18n.js` (t/setLanguage/getLanguage/subscribe store — audioState-shaped pub/sub), `staticHead.js` (index.html head selector-map swap), `dictionaries/bm.js` + `dictionaries/en.js` (flat alphabetical string maps)
+- Key files: `src/i18n/i18n.js`
+- Parity gate: `scripts/check-i18n-parity.mjs` via `npm run check:i18n`
 
 **`src/audio/`:**
 - Purpose: positional/game audio built on WebAudio
