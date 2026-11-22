@@ -69,30 +69,27 @@ Plans:
 - [x] 02-03-PLAN.md — Language hint toast (trigger/dismiss/persist) wired after revealAppUi
 **UI hint**: yes
 
-### Phase 3: Malay TTS Narration
-**Goal**: The intro story is spoken in Malay automatically from the ENTER click, surviving every known Web Speech API platform quirk
+### Phase 3: Malay Narration (merged: TTS + bundled audio per owner decision 2026-11-23)
+**Goal**: The full ~49-line Ghost Runner story is narrated in Malay from the ENTER click, synced to the story scroll with per-line highlighting, using a bundled pre-synthesized neural voice as the primary source (owner chose bundled-audio-now, merging former Phase 4)
 **Mode:** mvp
 **Depends on**: Phase 2
-**Requirements**: TTS-01, TTS-02, TTS-03, TTS-04, TTS-05, TTS-06
+**Requirements**: TTS-01, TTS-03, TTS-05, TTS-06, VOICE-01, VOICE-02 (TTS-02/TTS-04 browser-TTS queue/voice-chain demoted: bundled audio is the primary source; browser TTS remains only as an emergency fallback if the asset fails to load)
 **Success Criteria** (what must be TRUE):
   1. Narration starts automatically from the ENTER-button click and never speaks before a user gesture
   2. The complete story is narrated without truncation — sentence-sized utterances chained via `onend`, immune to the ~15 s Chrome/Safari cutoff, with a watchdog recovering from hung queues
   3. Toggling the audio button / mute cancels narration immediately
   4. Voice resolution follows the graded chain (local `ms` → network `ms-MY` → labeled `id-ID` → text-only), the UI always labels which voice is active, and the experience never silently mispronounces — text-only is the floor
   5. The currently-spoken sentence is highlighted in the intro overlay, and a replay button restarts the narration
-**Plans**: TBD — the FIRST plan must be the device-matrix spike (minimal "click → speak chunked Malay sentence" page validated on Chrome/Edge/Safari/mobile, with and without local ms voices) before building the narration pipeline. Research flags this phase as highest-risk; re-verify `voiceschanged` timing, gesture scoping, and long-utterance behavior on real hardware during the spike.
+**Plans**: TBD — FIRST plan: offline narration synthesis (generate the ms-MY neural audio for the full story, chunk into per-line segments, bundle as asset) — no device-matrix spike needed since browser TTS is no longer the primary source; SECOND plan: narration playback module (gesture-anchored start, per-line sync with scroll + highlight, mute integration, replay button, asset-failure fallback).
 **UI hint**: yes
 
-### Phase 4: Guaranteed Narration Asset
-**Goal**: Narration works for every visitor — including stock macOS/iOS and fully offline — via a bundled pre-synthesized Malay narration asset
+### Phase 4: Guaranteed Narration Asset — MERGED INTO PHASE 3 (owner decision 2026-11-23: bundled audio is the primary narration source, built directly in Phase 3)
+**Goal**: Merged — see Phase 3
 **Mode:** mvp
-**Depends on**: Phase 3
-**Requirements**: VOICE-01, VOICE-02
-**Success Criteria** (what must be TRUE):
-  1. When no platform or network Malay voice is available, the bundled pre-synthesized narration audio (~1–2 MB) plays the full intro story
-  2. The runtime automatically picks the best narration source — platform ms voice, network ms-MY voice, or the bundled asset — without user intervention
-  3. With the network fully offline, narration still plays from the bundled asset
-**Plans**: TBD
+**Depends on**: Phase 2 (via Phase 3)
+**Requirements**: none (VOICE-01/VOICE-02 moved to Phase 3)
+**Success Criteria**: see Phase 3
+**Plans**: none — merged
 **UI hint**: yes
 
 ## Progress
