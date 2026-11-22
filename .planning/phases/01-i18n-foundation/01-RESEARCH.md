@@ -466,17 +466,11 @@ Nothing in this phase depends on fast-moving ecosystem state — all patterns ar
 
 No `[ASSUMED]` package claims exist — the phase installs nothing.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **JSON-LD localization depth**
-   - What we know: CONTEXT.md gives agent's discretion; milestone research says translate `name`/`description` or keep EN.
-   - What's unclear: whether the owner wants crawler-facing structured data in BM.
-   - Recommendation: localize JSON-LD `description` to BM in the static baseline, keep `name` as brand; revisit in Phase 2 if SEO matters. Record the choice in the dictionary file comments.
+1. **JSON-LD localization depth — RESOLVED:** Localize JSON-LD `description` to BM in the static baseline; keep `name` as the brand (proper noun). Encoded by plan 01-04 Task 1 step 6; revisit in Phase 2 only if SEO priorities change. Record the choice in the dictionary file comments.
 
-2. **`settings.resetConfirm` semantics with language (Phase 2 boundary)**
-   - What we know: "Reset configs" clears stored preferences via `clearAllStoredPreferences`.
-   - What's unclear: whether a language reset should also occur (product call).
-   - Recommendation: Phase 1 does NOT add the language key to `clearAllStoredPreferences`; Phase 2 decides. Note it in the Phase 2 context.
+2. **`settings.resetConfirm` semantics with language (Phase 2 boundary) — RESOLVED:** Phase 1 does NOT add the language key to `clearAllStoredPreferences` — the current reset semantics must not change; Phase 2 decides the product call. Encoded by plan 01-01 Task 3 step 1; noted for the Phase 2 context.
 
 ## Validation Architecture
 
