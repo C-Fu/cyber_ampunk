@@ -1,10 +1,13 @@
 import "./settingsPanel.css";
+import { t, subscribe } from "../../i18n/i18n.js";
 import {
   phosphorArrowCounterClockwise,
   phosphorX,
 } from "../core/phosphorIcons.js";
 
 function renderLookButtons(lookOptions) {
+  // Labels resolve at render time from the dictionary (research §8, option a)
+  // so createAppShell.js LOOK_OPTIONS stays data-only.
   return lookOptions
     .map(
       (option) => `
@@ -15,7 +18,7 @@ function renderLookButtons(lookOptions) {
         aria-pressed="false"
       >
         <span class="settings-look-icon">${option.icon}</span>
-        <span class="settings-look-label">${option.label}</span>
+        <span class="settings-look-label">${t("look." + option.id)}</span>
       </button>
     `,
     )
@@ -37,15 +40,15 @@ export function createSettingsPanel({
   root.setAttribute("data-ui-block-look", "true");
   root.hidden = true;
   root.innerHTML = `
-    <div class="settings-glass" role="dialog" aria-modal="true" aria-label="Settings">
-      <button type="button" class="settings-close" aria-label="Close">
+    <div class="settings-glass" role="dialog" aria-modal="true" aria-label="${t("settings.aria")}">
+      <button type="button" class="settings-close" aria-label="${t("settings.close")}">
         ${phosphorX}
       </button>
 
       <div class="settings-options">
         <div class="settings-section">
-          <p class="settings-section-title">Look</p>
-          <div class="settings-look-grid" role="group" aria-label="Color look">
+          <p class="settings-section-title">${t("settings.look")}</p>
+          <div class="settings-look-grid" role="group" aria-label="${t("settings.lookAria")}">
             ${renderLookButtons(lookOptions)}
           </div>
         </div>
@@ -54,13 +57,13 @@ export function createSettingsPanel({
 
         <label class="settings-option">
           <span class="settings-option-text">
-            <span class="settings-option-title">Development mode</span>
+            <span class="settings-option-title">${t("settings.developmentMode")}</span>
           </span>
           <input
             type="checkbox"
             class="settings-toggle-input"
             data-development-mode
-            aria-label="Development mode"
+            aria-label="${t("settings.developmentModeAria")}"
           />
           <span class="settings-toggle" aria-hidden="true"></span>
         </label>
@@ -69,10 +72,10 @@ export function createSettingsPanel({
 
         <button type="button" class="settings-restart-btn" data-restart>
           <span class="settings-restart-icon">${phosphorArrowCounterClockwise}</span>
-          <span>Reset configs</span>
+          <span>${t("settings.resetConfigs")}</span>
         </button>
         <p class="settings-restart-hint">
-          Resets look preference and turns off development mode
+          ${t("settings.resetHint")}
         </p>
       </div>
     </div>
@@ -82,11 +85,34 @@ export function createSettingsPanel({
   const closeButton = root.querySelector(".settings-close");
   const devToggle = root.querySelector("[data-development-mode]");
   const restartButton = root.querySelector("[data-restart]");
+  const sectionTitle = root.querySelector(".settings-section-title");
+  const lookGrid = root.querySelector(".settings-look-grid");
+  const devTitle = root.querySelector(".settings-option-title");
+  const restartLabel = restartButton.querySelector("span:not(.settings-restart-icon)");
+  const restartHint = root.querySelector(".settings-restart-hint");
   const lookButtons = [...root.querySelectorAll("[data-look-preset]")];
   const lookOptionIds = new Set(lookOptions.map((option) => option.id));
 
   function syncDevelopmentMode(enabled) {
     devToggle.checked = Boolean(enabled);
+  }
+
+  // D-03: textContent/setAttribute writes only — dictionary values never
+  // reach an innerHTML write (D-04).
+  function syncText() {
+    glass.setAttribute("aria-label", t("settings.aria"));
+    closeButton.setAttribute("aria-label", t("settings.close"));
+    sectionTitle.textContent = t("settings.look");
+    lookGrid.setAttribute("aria-label", t("settings.lookAria"));
+    devTitle.textContent = t("settings.developmentMode");
+    devToggle.setAttribute("aria-label", t("settings.developmentModeAria"));
+    restartLabel.textContent = t("settings.resetConfigs");
+    restartHint.textContent = t("settings.resetHint");
+
+    for (const button of lookButtons) {
+      const label = button.querySelector(".settings-look-label");
+      label.textContent = t("look." + button.dataset.lookPreset);
+    }
   }
 
   function syncLookPreset(presetId = getCurrentLookPreset()) {
@@ -150,9 +176,9 @@ export function createSettingsPanel({
   });
 
   restartButton.addEventListener("click", () => {
-    const confirmed = window.confirm(
-      "Reset configs? Look preference will return to default and development mode will turn off.",
-    );
+    // Call-time t() — the native confirm dialog is not retroactively
+    // translatable, so it resolves at click time (PATTERN: call-time lookup).
+    const confirmed = window.confirm(t("settings.resetConfirm"));
     if (!confirmed) {
       return;
     }
@@ -177,6 +203,8 @@ export function createSettingsPanel({
     }
   });
 
+  const unsubscribeLanguage = subscribe(syncText);
+
   document.body.appendChild(root);
 
   return {
@@ -187,6 +215,7 @@ export function createSettingsPanel({
     syncDevelopmentMode,
     syncLookPreset,
     destroy() {
+      unsubscribeLanguage?.();
       document.removeEventListener("keydown", onKeyDown);
       root.remove();
     },
