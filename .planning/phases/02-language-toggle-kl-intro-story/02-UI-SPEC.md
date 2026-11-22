@@ -1,7 +1,8 @@
 ---
 phase: "2"
 slug: "language-toggle-kl-intro-story"
-status: draft
+status: approved
+reviewed_at: "2026-11-23"
 shadcn_initialized: false
 preset: none
 created: "2026-11-23"
@@ -111,7 +112,7 @@ Source of authority: `02-CONTEXT.md` D-01…D-10 (LOCKED) + Phase 1 C-1…C-4 (c
 | Settings row title | (no row title needed if the section title carries it — see SR-1) | — |
 | Toast message (BM-mode hint) | not shown (EN users see the BM-side hint) | `Lebih selesa dalam Bahasa Inggeris?` |
 | Toast message (EN-mode hint) | `Prefer Malay?` | not shown |
-| Toast action (switch) | `Switch to Malay` | `Tukar ke BM` |
+| Toast action (switch) | `Switch to English` | `Tukar ke BM` |
 | Toast dismiss (aria) | `Dismiss` | `Tutup` |
 | Intro kicker | `through the glass` → rewrite candidate within the story voice (≤ ~26 chars) | `melepasi kaca` → KL-flavored rewrite (≤ ~26 chars BM) |
 | Intro story (5–7 sentences) | KL-cyberpunk EN counterpart (faithful, not literal — D-10) | KL-cyberpunk BM rewrite (D-10 arc: runner, one delivery, tension in the rain, arrival) |
