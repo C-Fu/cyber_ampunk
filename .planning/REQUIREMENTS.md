@@ -28,17 +28,17 @@
 
 ### TTS Narration
 
-- [ ] **TTS-01**: Malay TTS narration of the intro story starts automatically from the ENTER-button click (gesture-anchored; no pre-gesture speech)
-- [ ] **TTS-02**: (demoted to fallback — bundled audio is primary) If the bundled narration asset fails to load, browser TTS speaks the story in sentence-sized utterances, immune to the ~15 s cutoff
-- [ ] **TTS-03**: Toggling the audio button / mute cancels narration immediately (WCAG 1.4.2 compliant)
-- [ ] **TTS-04**: (simplified per owner decision) Primary narration source is the bundled pre-synthesized ms-MY neural audio; the UI labels the active narration source; browser TTS is emergency fallback only
-- [ ] **TTS-05**: The currently-spoken sentence is highlighted in the intro overlay, synced to the narration queue
-- [ ] **TTS-06**: A replay button on the intro overlay restarts the narration
+- [x] **TTS-01**: Malay TTS narration of the intro story starts automatically from the ENTER-button click (gesture-anchored; no pre-gesture speech)
+- [x] **TTS-02**: (demoted to fallback — bundled audio is primary) If the bundled narration asset fails to load, browser TTS speaks the story in sentence-sized utterances, immune to the ~15 s cutoff
+- [x] **TTS-03**: Toggling the audio button / mute cancels narration immediately (WCAG 1.4.2 compliant)
+- [x] **TTS-04**: (simplified per owner decision) Primary narration source is the bundled pre-synthesized ms-MY neural audio; the UI labels the active narration source; browser TTS is emergency fallback only
+- [x] **TTS-05**: The currently-spoken sentence is highlighted in the intro overlay, synced to the narration queue
+- [x] **TTS-06**: A replay button on the intro overlay restarts the narration
 
 ### Voice Fallback Asset
 
-- [ ] **VOICE-01**: A pre-synthesized Malay narration audio asset (generated offline from a cloud neural ms-MY voice) ships as the PRIMARY narration — covering the full ~49-line story, chunked per line for highlighting
-- [ ] **VOICE-02**: Narration works for every visitor offline included — the bundled asset plays with or without network; no runtime cloud calls
+- [x] **VOICE-01**: A pre-synthesized Malay narration audio asset (generated offline from a cloud neural ms-MY voice) ships as the PRIMARY narration — covering the full ~49-line story, chunked per line for highlighting
+- [x] **VOICE-02**: Narration works for every visitor offline included — the bundled asset plays with or without network; no runtime cloud calls
 
 ## v2 Requirements (Deferred)
 
@@ -70,14 +70,14 @@
 | LANG-04 | Phase 2 | Complete |
 | INTRO-01 | Phase 2 | Complete |
 | INTRO-02 | Phase 2 | Complete |
-| TTS-01 | Phase 3 | Pending |
-| TTS-02 | Phase 3 | Pending |
-| TTS-03 | Phase 3 | Pending |
-| TTS-04 | Phase 3 | Pending |
-| TTS-05 | Phase 3 | Pending |
-| TTS-06 | Phase 3 | Pending |
-| VOICE-01 | Phase 4 | Pending |
-| VOICE-02 | Phase 4 | Pending |
+| TTS-01 | Phase 3 | Complete |
+| TTS-02 | Phase 3 | Complete |
+| TTS-03 | Phase 3 | Complete |
+| TTS-04 | Phase 3 | Complete |
+| TTS-05 | Phase 3 | Complete |
+| TTS-06 | Phase 3 | Complete |
+| VOICE-01 | Phase 3 | Complete |
+| VOICE-02 | Phase 3 | Complete |
 
 ## Definition of Done
 
