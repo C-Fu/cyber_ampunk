@@ -47,10 +47,39 @@ import {
 import { getStoredLookPreset, isDevelopmentModeEnabled } from "./platform/userPreferences.js";
 import { applyStaticHead } from "./i18n/staticHead.js";
 import { t } from "./i18n/i18n.js";
+import { createIntroNarration } from "./audio/createIntroNarration.js";
 import {
   DEFAULT_LOOK_PRESET,
   LOOK_PRESETS,
 } from "./post/look/cyberpunkLook.js";
+
+const STORY_LINE_COUNT = 49;
+const NARRATION_CUE_URL =
+  ".planning/phases/03-malay-tts-narration/narration-cue.json";
+
+// Load the per-line cue durations map (Task 3 / carried decision: audio
+// drives scroll length). Returns null on any missing or non-numeric
+// duration — the caller keeps the CSS default (100s) then.
+async function loadNarrationCue() {
+  try {
+    const response = await fetch(NARRATION_CUE_URL);
+    if (!response.ok) {
+      return null;
+    }
+    const cue = await response.json();
+    let total = 0;
+    for (let i = 1; i <= STORY_LINE_COUNT; i += 1) {
+      const seconds = cue[`l${String(i).padStart(2, "0")}`];
+      if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds < 0) {
+        return null;
+      }
+      total += seconds;
+    }
+    return total > 0 ? { cue, total } : null;
+  } catch {
+    return null;
+  }
+}
 
 const loader = createLoaderOverlay();
 
@@ -217,6 +246,40 @@ async function init(loaderOverlay) {
   cameraDirector.setFootstepAudio(wetFootstepAudio);
   attachDevAudio(devApp, carEngineAudio, planeEngineAudio, wetFootstepAudio);
 
+  // --- Narration wiring (phase 3 TTS-01..06) ---
+  // Build the per-line narration factory with the bm story keys, the
+  // committed lNN.mp3 assets, cue-driven watchdogs, and the overlay's
+  // highlight/scroll callbacks. startNarration is passed into the flow and
+  // invoked synchronously inside the ENTER gesture handler (Pitfall 2).
+  const narrationKeys = Array.from(
+    { length: STORY_LINE_COUNT },
+    (_, i) => `intro.story.l${String(i + 1).padStart(2, "0")}`,
+  );
+  const narrationCue = await loadNarrationCue();
+
+  // Returns the gesture-anchored start function for the given overlay;
+  // also applies the cue-driven scroll duration once, at setup time.
+  function setupNarration(introOverlay) {
+    const narration = createIntroNarration({
+      keys: narrationKeys,
+      getSourceUrl: (nn) => `/audio/narration/l${nn}.mp3`,
+      getT: (key) => t(key),
+      cueDurations: narrationCue?.cue ?? null,
+      onLineChange: (index) => introOverlay.setStoryHighlight(index),
+      onFinish: () => {},
+      onSourceChange: () => {},
+    });
+    if (narrationCue?.total) {
+      introOverlay.setScrollDuration(narrationCue.total);
+    }
+    return {
+      start: () => narration.start(),
+      stop: () => narration.stop(),
+      restart: () => narration.restart(),
+      narration,
+    };
+  }
+
   appShell.bindIdleListeners();
   appShell.bindOrbitIdleListeners(cameraDirector.controls);
 
@@ -241,6 +304,10 @@ async function init(loaderOverlay) {
         toast.destroy();
       }
     },
+    // TTS-01: gesture-anchored narration start — the flow passes its
+    // overlay here so main.js wires the factory + UI callbacks and returns
+    // the synchronous start() caller.
+    setupNarration,
   });
 
   const renderLoop = createRenderLoop({

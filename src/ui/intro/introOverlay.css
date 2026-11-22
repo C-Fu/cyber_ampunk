@@ -89,6 +89,9 @@
   /* Story window height — shared by the container and the scroll keyframes
      so the animation ends holding the last lines inside the window. */
   --intro-story-h: clamp(7.5rem, 22vh, 13rem);
+  /* Story scroll duration — overridden at runtime from the narration cue
+     totals so the credits scroll ends when the voice does. */
+  --intro-story-dur: 100s;
 }
 
 .intro-container .intro-story {
@@ -117,7 +120,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.9em;
-  animation: intro-story-scroll 100s linear both;
+  animation: intro-story-scroll var(--intro-story-dur, 100s) linear both;
   will-change: transform;
 }
 
@@ -128,9 +131,26 @@
   font-size: clamp(0.78rem, 1.7vw, 0.95rem);
   line-height: 1.45;
   letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.55);
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
   text-wrap: pretty;
+  /* H-1: highlight is paint-only — color/opacity/text-shadow transition
+     over 300ms; no geometry or weight change (zero-reflow). */
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+/* H-3 (D-03/TTS-05): the currently-spoken line takes the cyan accent —
+   the existing dark shadow plus a cyan bloom. Non-spoken lines dim to
+   rgba(255, 255, 255, 0.55) (base rule above). */
+.intro-container .intro-story-line--active {
+  color: var(--cyber-text);
+  opacity: 1;
+  text-shadow:
+    0 2px 18px rgba(0, 0, 0, 0.5),
+    0 0 14px rgba(34, 211, 238, 0.35);
 }
 
 @keyframes intro-story-scroll {

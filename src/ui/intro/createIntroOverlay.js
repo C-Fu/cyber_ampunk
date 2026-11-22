@@ -24,7 +24,11 @@ function splitIntoLetters(element, className = "intro-letter") {
   });
 }
 
-export function createIntroOverlay({ onStart } = {}) {
+export function createIntroOverlay({
+  onStart,
+  onExited,
+  onLanguageSwitchDuringPlayback,
+} = {}) {
   const root = document.createElement("div");
   root.className = "intro-container";
   root.setAttribute("aria-hidden", "false");
@@ -62,17 +66,25 @@ export function createIntroOverlay({ onStart } = {}) {
 
   // Story lines are built with createElement/textContent only — no
   // innerHTML interpolation of t() output (T-2-03, D-04). Every line is its
-  // own <p>; NEVER letter-split the story (D-05).
+  // own <p>; NEVER letter-split the story (D-05). Line elements are kept in
+  // an array at render time so the narration highlight can rebind after any
+  // rebuild (HL-4).
+  const storyLineEls = [];
+
   function renderStory() {
     storyScroll.textContent = "";
+    storyLineEls.length = 0;
     for (const key of STORY_KEYS) {
       const line = document.createElement("p");
       line.className = "intro-story-line";
       line.textContent = t(key);
       storyScroll.appendChild(line);
+      storyLineEls.push(line);
     }
     // Rebuild restarts the scroll from the top on language switch.
     restartStoryScroll();
+    // HL-4: fresh line elements need the current highlight re-applied.
+    rebindStoryHighlight();
   }
 
   // Credits-style slow upward auto-scroll on the inner wrapper (owner
@@ -92,6 +104,10 @@ export function createIntroOverlay({ onStart } = {}) {
     kicker.textContent = t("intro.kicker");
     renderStory();
     button.textContent = t("intro.enter");
+    // Language switch during playback stops narration and clears the
+    // highlight (Pitfall 6 — no EN audio exists per D-02, simplest correct
+    // behavior). Rebind the highlight targets after the rebuild (HL-4).
+    onLanguageSwitchDuringPlayback?.();
   }
 
   // Page-lifetime subscription (same convention as createHeader.js): the
@@ -99,6 +115,48 @@ export function createIntroOverlay({ onStart } = {}) {
   // future teardown but deliberately never released here.
   const unsubscribeLanguage = subscribe(syncText);
   void unsubscribeLanguage;
+
+  // TTS-05 highlight: exactly zero-or-one active line (HL-2). index === null
+  // clears the highlight (story end, mute, HL-3). Targets are the live
+  // storyLineEls array, so a renderStory() rebuild is picked up on the next
+  // call; the current index is re-applied instantly after rebuilds (HL-4).
+  let activeLineIndex = null;
+
+  function setStoryHighlight(index) {
+    activeLineIndex =
+      typeof index === "number" && index >= 0 && index < storyLineEls.length
+        ? index
+        : null;
+    storyLineEls.forEach((line, i) => {
+      line.classList.toggle("intro-story-line--active", i === activeLineIndex);
+    });
+  }
+
+  // Rebind after every renderStory() rebuild (HL-4): language switches
+  // rebuild the DOM, so re-apply the current highlight index to the fresh
+  // elements.
+  function rebindStoryHighlight() {
+    const index = activeLineIndex;
+    setStoryHighlight(null);
+    if (index !== null) {
+      setStoryHighlight(index);
+    }
+  }
+
+  // Scroll tuning (TTS-03 plan / carried decision): set the CSS var driving
+  // the story scroll duration, then restart the animation so the new
+  // duration takes effect from the top.
+  function setScrollDuration(seconds) {
+    if (
+      typeof seconds !== "number" ||
+      !Number.isFinite(seconds) ||
+      seconds <= 0
+    ) {
+      return;
+    }
+    root.style.setProperty("--intro-story-dur", `${seconds}s`);
+    restartStoryScroll();
+  }
 
   let started = false;
   let enterTween = null;
@@ -185,10 +243,27 @@ export function createIntroOverlay({ onStart } = {}) {
       );
   }
 
-  function playExit({ duration = 0.6 } = {}) {
+  function playExit({ duration = 0.6, keepStory = false } = {}) {
     return new Promise((resolve) => {
       enterTween?.kill();
       exitTween?.kill();
+      if (keepStory) {
+        // Narration mode: fade only the surrounding chrome; the story
+        // window stays for the whole narration run. The ENTER button fades
+        // and becomes inert (replay takes over, RP-1).
+        exitTween = gsap
+          .timeline({
+            onComplete: () => {
+              resolve();
+            },
+          })
+          .to(kicker, { opacity: 0, duration, ease: "power1.out" }, 0)
+          .to(brandLines, { opacity: 0, duration, ease: "power1.out" }, 0)
+          .to(rule, { opacity: 0, duration, ease: "power1.out" }, 0)
+          .to(button, { opacity: 0, duration, ease: "power1.out" }, 0)
+          .to(credit, { opacity: 0, duration, ease: "power1.out" }, 0);
+        return;
+      }
       exitTween = gsap.to(root, {
         opacity: 0,
         duration,
@@ -210,9 +285,15 @@ export function createIntroOverlay({ onStart } = {}) {
     button.disabled = true;
     button.style.pointerEvents = "none";
 
+    // TTS-01 gesture anchor: narration start() is invoked synchronously at
+    // the top of the ENTER click handler — before any await — so the first
+    // audio play() lands inside the user-gesture window (Pitfall 2).
+    onStart?.();
     void (async () => {
-      await playExit();
-      await onStart?.();
+      await playExit({ keepStory: true });
+      // Chrome faded with the story kept — hand off to the app reveal
+      // sequence (glass fade, DoF restore, UI reveal) in the flow layer.
+      onExited?.();
     })();
   }
 
@@ -222,6 +303,9 @@ export function createIntroOverlay({ onStart } = {}) {
     root,
     playEnter,
     playExit,
+    setStoryHighlight,
+    rebindStoryHighlight,
+    setScrollDuration,
     destroy() {
       enterTween?.kill();
       exitTween?.kill();

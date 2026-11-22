@@ -10,9 +10,12 @@ export function createIntroFlow({
   revealAppUi,
   world,
   showLanguageHintToast,
+  setupNarration,
 }) {
   let rainGlassIntro = null;
   let introActive = false;
+  let narrationStop = null;
+  let startNarrationRef = null;
 
   function setIntroWorldPaused(paused) {
     if (!world) {
@@ -41,32 +44,48 @@ export function createIntroFlow({
     rainGlassIntro = createRainGlassIntro({ pipeline });
 
     const introOverlay = createIntroOverlay({
-      onStart: async () => {
-        // 1) text already faded via playExit
-        // 2) show notice while glass is still fully on
+      // TTS-01 gesture anchor: invoked synchronously at the top of the
+      // ENTER click handler (before playExit awaits) — the narration start
+      // closure must kick the first audio play() inside the gesture window
+      // (Pitfall 2). setupNarration is DI'd from main.js.
+      onStart: () => {
+        startNarrationRef?.start();
+      },
+      // Post-exit app reveal (glass fade, DoF restore, UI reveal) runs after
+      // the keepStory exit completes so narration keeps the story window up.
+      onExited: async () => {
         const notice = createPerformanceNotice();
         notice.show();
         await new Promise((resolve) => setTimeout(resolve, 450));
 
-        // 3) fade glass, then restore DoF / lensflare / dispose pass
         await rainGlassIntro?.fadeOut({ duration: 1.2 });
         rainGlassIntro?.destroy();
         rainGlassIntro = null;
         introActive = false;
         setIntroWorldPaused(false);
 
-        // Keep the notice up after the graph restore so the hitch is covered.
         await new Promise((resolve) => setTimeout(resolve, 1000));
         await notice.hide();
         notice.destroy();
         renderer.domElement.style.pointerEvents = "auto";
         revealAppUi();
-        // LANG-04 (TO-10): hint toast fires right after app UI reveal. The
-        // closure is DI'd from main.js; the toast guards itself (TO-3) and
-        // stays inert when the guard fails — safe under optional chaining.
         showLanguageHintToast?.();
       },
+      // Pitfall 6: language switch during playback stops narration and
+      // clears the highlight (no EN audio exists per D-02).
+      onLanguageSwitchDuringPlayback: () => {
+        narrationStop?.();
+      },
     });
+
+    // main.js builds the narration factory against THIS overlay and
+    // returns the synchronous gesture-anchored start() caller (TTS-01);
+    // the returned handle also exposes stop for the language-switch path.
+    const narrationHandle = setupNarration?.(introOverlay) ?? null;
+    startNarrationRef = narrationHandle;
+    narrationStop = narrationHandle
+      ? () => narrationHandle.stop()
+      : null;
 
     await revealCanvas();
     introOverlay.playEnter();
