@@ -29,16 +29,16 @@
 ### TTS Narration
 
 - [ ] **TTS-01**: Malay TTS narration of the intro story starts automatically from the ENTER-button click (gesture-anchored; no pre-gesture speech)
-- [ ] **TTS-02**: The narration queue splits the story into sentence-sized utterances (≤ ~300 chars) chained via `onend`, immune to the ~15 s Chrome/Safari utterance cutoff
+- [ ] **TTS-02**: (demoted to fallback — bundled audio is primary) If the bundled narration asset fails to load, browser TTS speaks the story in sentence-sized utterances, immune to the ~15 s cutoff
 - [ ] **TTS-03**: Toggling the audio button / mute cancels narration immediately (WCAG 1.4.2 compliant)
-- [ ] **TTS-04**: Voice resolution follows a graded chain — local `ms` voice → network `ms-MY` voice → labeled `id-ID` cross-language fallback → text-only — and the UI always labels which voice is active (never silently mispronounce)
+- [ ] **TTS-04**: (simplified per owner decision) Primary narration source is the bundled pre-synthesized ms-MY neural audio; the UI labels the active narration source; browser TTS is emergency fallback only
 - [ ] **TTS-05**: The currently-spoken sentence is highlighted in the intro overlay, synced to the narration queue
 - [ ] **TTS-06**: A replay button on the intro overlay restarts the narration
 
 ### Voice Fallback Asset
 
-- [ ] **VOICE-01**: A pre-synthesized Malay narration audio asset (~1–2 MB, generated offline from a cloud neural ms-MY voice) ships as the guaranteed narration fallback when no runtime Malay voice is available
-- [ ] **VOICE-02**: Runtime picks the best narration source — platform ms voice, network ms-MY voice, or the bundled audio asset — with the bundled asset guaranteeing narration works offline and on stock macOS/iOS
+- [ ] **VOICE-01**: A pre-synthesized Malay narration audio asset (generated offline from a cloud neural ms-MY voice) ships as the PRIMARY narration — covering the full ~49-line story, chunked per line for highlighting
+- [ ] **VOICE-02**: Narration works for every visitor offline included — the bundled asset plays with or without network; no runtime cloud calls
 
 ## v2 Requirements (Deferred)
 
