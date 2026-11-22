@@ -8,11 +8,11 @@
 
 ### Localization Core
 
-- [ ] **LOC-01**: All user-facing text renders in Bahasa Melayu by default across every UI surface — header, settings panel, about panel, intro overlay, walk hints, HUD, virtual joystick, walk prompt, performance notice, loader overlay, and loader statuses in `src/main.js`
+- [x] **LOC-01**: All user-facing text renders in Bahasa Melayu by default across every UI surface — header, settings panel, about panel, intro overlay, walk hints, HUD, virtual joystick, walk prompt, performance notice, loader overlay, and loader statuses in `src/main.js`
 - [ ] **LOC-02**: User can switch language BM ⇄ EN with an instant, no-reload re-render of all visible UI (pub/sub text re-sync, no appShell teardown)
-- [ ] **LOC-03**: `document.documentElement.lang` and `document.title` swap at runtime with the active language (`"ms"` for BM)
-- [ ] **LOC-04**: Static `index.html` head text (title, meta description) is localized with BM as the hardcoded static baseline, swapped to EN via JS only when the stored preference says EN
-- [ ] **LOC-05**: OG/Twitter card meta tags localize with the active language
+- [x] **LOC-03**: `document.documentElement.lang` and `document.title` swap at runtime with the active language (`"ms"` for BM)
+- [x] **LOC-04**: Static `index.html` head text (title, meta description) is localized with BM as the hardcoded static baseline, swapped to EN via JS only when the stored preference says EN
+- [x] **LOC-05**: OG/Twitter card meta tags localize with the active language
 
 ### Language Toggle
 
@@ -59,11 +59,11 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| LOC-01 | Phase 1 | Pending |
+| LOC-01 | Phase 1 | Complete |
 | LOC-02 | Phase 2 | Pending |
-| LOC-03 | Phase 1 | Pending |
-| LOC-04 | Phase 1 | Pending |
-| LOC-05 | Phase 1 | Pending |
+| LOC-03 | Phase 1 | Complete |
+| LOC-04 | Phase 1 | Complete |
+| LOC-05 | Phase 1 | Complete |
 | LANG-01 | Phase 2 | Pending |
 | LANG-02 | Phase 2 | Pending |
 | LANG-03 | Phase 1 | Complete |

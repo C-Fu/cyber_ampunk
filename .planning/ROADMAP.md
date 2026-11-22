@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The static `index.html` head (title, meta description) is BM in the raw HTML source before any JS runs
   4. OG/Twitter card meta tags carry BM content
   5. Every migrated string exists in both the BM and EN dictionaries (full parity, ready for the Phase 2 toggle)
-**Plans**: 3/4 plans executed
+**Plans**: 4/4 plans executed
 Plans:
 **Wave 1**
 - [x] 01-01-PLAN.md — Tracer: i18n store + dictionaries + parity script + walk prompt migration + staticHead boot wiring + dormant EN persistence path
@@ -42,7 +42,7 @@ Plans:
 - [x] 01-03-PLAN.md — Composite surfaces: settings panel + about panel (data-i18n walker) + header + walk controls hint (SVG callouts)
 
 **Wave 4** *(blocked on Wave 3 completion)*
-- [ ] 01-04-PLAN.md — Static BM head baseline in index.html + CSS text-expansion sweep + owner BM copy review (D-10) + residual-English audit
+- [x] 01-04-PLAN.md — Static BM head baseline in index.html + CSS text-expansion sweep + owner BM copy review (D-10) + residual-English audit
 
 **UI hint**: yes
 
@@ -93,7 +93,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. i18n Foundation | 3/4 | In Progress | - |
+| 1. i18n Foundation | 4/4 | In Progress | - |
 | 2. Language Toggle & KL Intro Story | 0/TBD | Not started | - |
 | 3. Malay TTS Narration | 0/TBD | Not started | - |
 | 4. Guaranteed Narration Asset | 0/TBD | Not started | - |
