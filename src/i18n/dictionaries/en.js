@@ -18,6 +18,8 @@ export const en = {
   "hud.vitals": "VITALS",
   "header.about": "ABOUT",
   "header.aboutAria": "About",
+  "header.langAriaBm": "Language: Malay. Activate to switch to English.",
+  "header.langAriaEn": "Language: English. Activate to switch to Malay.",
   "header.settingsAria": "Settings",
   "header.source": "SOURCE",
   "header.sourceAria": "Source code",

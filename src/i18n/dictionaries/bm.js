@@ -19,6 +19,8 @@ export const bm = {
   "hud.vitals": "Vital",
   "header.about": "Tentang",
   "header.aboutAria": "Tentang",
+  "header.langAriaBm": "Bahasa: Bahasa Melayu. Aktifkan untuk bertukar ke Bahasa Inggeris.",
+  "header.langAriaEn": "Bahasa: Bahasa Inggeris. Aktifkan untuk bertukar ke Bahasa Melayu.",
   "header.settingsAria": "Tetapan",
   "header.source": "Sumber",
   "header.sourceAria": "Kod sumber",

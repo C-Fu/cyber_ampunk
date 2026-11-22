@@ -66,6 +66,73 @@
     visibility 0s linear 0.8s;
 }
 
+.app-header-lang-btn {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  color: var(--cyber-text);
+  font-size: 9px;
+  text-align: center;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: var(--cyber-bg);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  border: 1px solid var(--cyber-border);
+  border-radius: 0;
+  clip-path: var(--cyber-clip-sm);
+  box-shadow: var(--cyber-glow);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.35s ease;
+  pointer-events: all;
+  cursor: pointer;
+  font-family: "Orbitron", sans-serif;
+}
+
+.app-header-lang-btn:hover {
+  background: var(--cyber-bg-hover);
+  border-color: var(--cyber-border-hover);
+  color: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--cyber-glow-hover);
+}
+
+.lang-toggle-segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  color: var(--cyber-text-muted);
+  transition:
+    color 0.35s ease,
+    background 0.35s ease;
+}
+
+.lang-toggle-segment + .lang-toggle-segment {
+  border-left: 2px solid var(--cyber-border);
+}
+
+/* Active-segment values copied verbatim from .settings-look-btn--active. */
+.lang-toggle-segment--active {
+  background: rgba(168, 85, 247, 0.16);
+  border-color: rgba(34, 211, 238, 0.55);
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.app-header-lang-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
 .app-header-about-btn {
   display: flex;
   flex-direction: row;
@@ -177,6 +244,11 @@
   .app-header-actions {
     gap: 8px;
     flex-shrink: 0;
+  }
+
+  .app-header-lang-btn {
+    height: 40px;
+    padding: 0 12px;
   }
 
   .app-header-about-btn {
