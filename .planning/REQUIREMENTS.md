@@ -59,7 +59,25 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| (filled by roadmap) | | |
+| LOC-01 | Phase 1 | Pending |
+| LOC-02 | Phase 2 | Pending |
+| LOC-03 | Phase 1 | Pending |
+| LOC-04 | Phase 1 | Pending |
+| LOC-05 | Phase 1 | Pending |
+| LANG-01 | Phase 2 | Pending |
+| LANG-02 | Phase 2 | Pending |
+| LANG-03 | Phase 1 | Pending |
+| LANG-04 | Phase 2 | Pending |
+| INTRO-01 | Phase 2 | Pending |
+| INTRO-02 | Phase 2 | Pending |
+| TTS-01 | Phase 3 | Pending |
+| TTS-02 | Phase 3 | Pending |
+| TTS-03 | Phase 3 | Pending |
+| TTS-04 | Phase 3 | Pending |
+| TTS-05 | Phase 3 | Pending |
+| TTS-06 | Phase 3 | Pending |
+| VOICE-01 | Phase 4 | Pending |
+| VOICE-02 | Phase 4 | Pending |
 
 ## Definition of Done
 
