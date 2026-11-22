@@ -80,10 +80,10 @@ Plans:
   3. Toggling the audio button / mute cancels narration immediately
   4. Voice resolution follows the graded chain (local `ms` → network `ms-MY` → labeled `id-ID` → text-only), the UI always labels which voice is active, and the experience never silently mispronounces — text-only is the floor
   5. The currently-spoken sentence is highlighted in the intro overlay, and a replay button restarts the narration
-**Plans**: 2 plans
+**Plans**: 1/2 plans executed
 Plans:
 **Wave 1**
-- [ ] 03-01-PLAN.md — Offline narration asset pipeline: synthesis script + integrity gate + owner Azure-provision/ear-review checkpoint (VOICE-01/02)
+- [x] 03-01-PLAN.md — Offline narration asset pipeline: synthesis script + integrity gate + owner Azure-provision/ear-review checkpoint (VOICE-01/02)
 
 **Wave 2** *(blocked on Wave 1 — owner-approved assets + shared intro overlay files)*
 - [ ] 03-02-PLAN.md — Narration playback module: gesture-anchored start, keepStory exit, per-line highlight, mute integration, replay button, source label, TTS fallback, scroll tuning (TTS-01..06)
@@ -107,5 +107,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. i18n Foundation | 4/4 | Complete    | 2026-11-23 |
 | 2. Language Toggle & KL Intro Story | 3/3 | Complete | 2026-11-23 |
-| 3. Malay TTS Narration | 0/TBD | Not started | - |
+| 3. Malay TTS Narration | 1/2 | In Progress | - |
 | 4. Guaranteed Narration Asset | 0/TBD | Not started | - |
