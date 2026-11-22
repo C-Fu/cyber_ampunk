@@ -1,6 +1,6 @@
 ---
-last_mapped_commit: 8cc20593b2270e2ce832e7b7b44356705daddec4
-last_mapped_at: 2026-11-22
+last_mapped_commit: de9d95337071737e9086c6a2a1c25d16e8454a48
+last_mapped_at: 2026-11-23
 ---
 # Technology Stack
 
@@ -40,6 +40,7 @@ last_mapped_at: 2026-11-22
 **Build/Dev:**
 - Vite `^6.3.5` - dev server and production build (`npm run dev`, `npm run build`, `npm run preview`)
 - @vitejs/plugin-basic-ssl `^2.3.0` - HTTPS dev server (WebGPU requires a secure context; see `vite.config.js:53`)
+- `check:i18n` npm script - runs the dependency-free Node ESM gate `scripts/check-i18n-parity.mjs` (BM/EN dictionary key parity, `src/i18n/dictionaries/`)
 - Custom Vite middleware plugin `three-inspector-extensions` (`vite.config.js:21-45`) - serves `node_modules/three/examples/jsm/inspector/extensions` at `/node_modules/.vite/extensions/` for dev and preview servers
 - vercel `^56.2.0` - CLI deployment tool (`npm run deploy` runs `vercel --prod`)
 

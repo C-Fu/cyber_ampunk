@@ -1,23 +1,25 @@
 ---
-last_mapped_commit: 8cc20593b2270e2ce832e7b7b44356705daddec4
-last_mapped_at: 2026-11-22
+last_mapped_at: 2026-11-23
+last_mapped_commit: de9d95337071737e9086c6a2a1c25d16e8454a48
 ---
 # Codebase Structure
 
-**Analysis Date:** 2026-11-22
+**Analysis Date:** 2026-11-23
 
 ## Directory Layout
 
 ```
 cyberpunk-malaya/
-├── index.html            # Single-page entry; loads /src/main.js as module
+├── index.html            # Single-page entry; BM static baseline (lang="ms"); loads /src/main.js as module
 ├── vite.config.js        # Vite + basicSsl (HTTPS for WebGPU) + inspector extension middleware
-├── package.json          # three, gsap, three-mesh-bvh; scripts: dev/build/preview/deploy
+├── package.json          # three, gsap, three-mesh-bvh; scripts: dev/build/check:i18n/preview/deploy
 ├── AGENTS.md             # Agent instructions: constraints, file routing, recipes
 ├── README.md             # Human overview + Source map table
 ├── STRIP.md              # Guide for stripping scene layers (linked from features.js)
 ├── docs/
 │   └── techniques/       # Deep dives: collision-rain, wet-ground, car-surface-rain
+├── scripts/
+│   └── check-i18n-parity.mjs  # Node ESM gate: bm.js/en.js key-set parity (npm run check:i18n)
 ├── public/               # Static assets served as-is
 │   ├── models/           # GLB assets: cyberpunk_compressed.glb, colider.glb, quadra.glb, billboards.glb, plane.glb
 │   ├── textures/         # wet-puddles PBR set, rainDrop.png, smoke.png, water-splash.webp
@@ -34,13 +36,13 @@ cyberpunk-malaya/
 │   ├── clouds/           # Cloud sky material + noise textures
 │   ├── controls/         # Walk controls (BVH collision)
 │   ├── debug/            # Dev API, inspector session, perf devtools
-│   ├── intro/            # Rain-glass intro effect (TSL-driven)
 │   ├── i18n/             # Bilingual dictionary store + dictionaries/ + staticHead head swap
+│   ├── intro/            # Rain-glass intro effect (TSL-driven)
 │   ├── platform/         # Device detection, perf profile, adaptive DPR, user prefs
 │   ├── post/             # RenderPipeline + look presets (post/look/)
 │   ├── runtime/          # Render loop, camera director, warmup
 │   ├── tsl/              # Reusable TSL shader node modules
-│   ├── ui/               # DOM UI: core/, chrome/, intro/, walk/
+│   ├── ui/               # DOM UI: core/, chrome/, intro/, walk/ (all copy via src/i18n/)
 │   └── world/            # Scene content: car/, city/, ground/, weather/, billboards/, effects/, loaders/
 └── .planning/            # GSD planning artifacts (codebase maps live here)
 ```
@@ -49,18 +51,23 @@ cyberpunk-malaya/
 
 **`src/` (root files):**
 - Purpose: composition root only
-- Contains: `main.js` — imports every factory and wires them; no rendering logic of its own
+- Contains: `main.js` — imports every factory and wires them; calls `applyStaticHead()` at boot; no rendering logic of its own
 
 **`src/app/`:**
 - Purpose: app-lifecycle shells that aggregate other layers
-- Contains: `createAppShell.js` (all UI chrome + audio wiring), `createIntroFlow.js` (boot → intro → reveal sequence), `createLoaderOverlay.js` (progress UI)
+- Contains: `createAppShell.js` (all UI chrome + audio wiring), `createIntroFlow.js` (boot → intro → reveal sequence), `createLoaderOverlay.js` (progress UI — loader status copy via `t("loader.*")`)
 - Key files: `src/app/createAppShell.js`
 
 **`src/i18n/`:**
 - Purpose: hand-rolled BM/EN localization layer (zero dependencies)
-- Contains: `i18n.js` (t/setLanguage/getLanguage/subscribe store — audioState-shaped pub/sub), `staticHead.js` (index.html head selector-map swap), `dictionaries/bm.js` + `dictionaries/en.js` (flat alphabetical string maps)
+- Contains: `i18n.js` (`t(key, vars)` / `setLanguage` / `getLanguage` / `subscribe` store — audioState-shaped pub/sub), `staticHead.js` (index.html head selector-map swap: title, 8 meta nodes, `og:locale`, `<html lang>`), `dictionaries/bm.js` + `dictionaries/en.js` (flat dot-notation alphabetical string maps, one key per line, ~81 keys)
 - Key files: `src/i18n/i18n.js`
 - Parity gate: `scripts/check-i18n-parity.mjs` via `npm run check:i18n`
+
+**`scripts/`:**
+- Purpose: dependency-free Node ESM verification scripts (not unit tests)
+- Contains: `check-i18n-parity.mjs` — imports both dictionaries, compares key sets, `process.exit(1)` on mismatch
+- Key files: `scripts/check-i18n-parity.mjs`
 
 **`src/audio/`:**
 - Purpose: positional/game audio built on WebAudio
@@ -77,11 +84,11 @@ cyberpunk-malaya/
 
 **`src/controls/`:**
 - Purpose: first-person movement
-- Contains: `createWalkControls.js` (799 lines — pointer lock, WASD, mobile joystick input, BVH capsule collision, footstep events)
+- Contains: `createWalkControls.js` (pointer lock, WASD, mobile joystick input, BVH capsule collision, footstep events)
 
 **`src/debug/`:**
 - Purpose: development-mode tooling
-- Contains: `createDevAppApi.js` (`window.__app`), `createInspectorSession.js`, `setupInspector.js` (963 lines, Three.js inspector), `createPerformanceDevTools.js`, `inspectorControls.js`, `inspectorLayout.css`
+- Contains: `createDevAppApi.js` (`window.__app`), `createInspectorSession.js`, `setupInspector.js` (Three.js inspector), `createPerformanceDevTools.js`, `inspectorControls.js`, `inspectorLayout.css`
 - Note: inspector panels hidden outside Development Mode; perf API available in production
 
 **`src/intro/`:**
@@ -90,12 +97,12 @@ cyberpunk-malaya/
 
 **`src/platform/`:**
 - Purpose: leaf-layer device/quality/user state — imports nothing project-internal
-- Contains: `performanceProfile.js` (all perf knobs + device defaults), `deviceLayout.js` (mobile/Safari detection, layout classes), `adaptiveDpr.js` (FPS-driven DPR controller), `userPreferences.js` (localStorage: look preset, dev mode)
+- Contains: `performanceProfile.js` (all perf knobs + device defaults), `deviceLayout.js` (mobile/Safari detection, layout classes), `adaptiveDpr.js` (FPS-driven DPR controller), `userPreferences.js` (localStorage: look preset, dev mode, language key `threejs-punk-language` via `getStoredLanguage`/`setStoredLanguage`)
 - Key files: `src/platform/performanceProfile.js`
 
 **`src/post/`:**
 - Purpose: render pipeline and grading
-- Contains: `postprocessing.js` (RenderPipeline: AO pre-pass, MRT scene pass, bloom, DoF, lensflare, SMAA, rain glass, composite), `look/cyberpunkLook.js` (6 look presets)
+- Contains: `postprocessing.js` (RenderPipeline: AO pre-pass, MRT scene pass, bloom, DoF, lensflare, SMAA, rain glass, composite), `look/cyberpunkLook.js` (6 look presets — preset names localized via `look.*` keys)
 - Key files: `src/post/postprocessing.js`
 
 **`src/runtime/`:**
@@ -108,8 +115,9 @@ cyberpunk-malaya/
 - Contains: `surfaceRain.js` (car droplets), `rainRipples.js` (ground ripples), `rainGlass.js` (intro), `boxBlur.js` (separable blur for DoF), `edgeChromaticAberration.js`
 
 **`src/ui/`:**
-- Purpose: DOM overlay UI, co-located CSS
+- Purpose: DOM overlay UI, co-located CSS; every user-facing string flows through `src/i18n/i18n.js` (`t()` + `subscribe(syncText)`)
 - Contains: `core/` (global.css, appUiState, phosphor icons, external links), `chrome/` (header, about, settings, audio button, visibility coordinator), `intro/` (intro overlay, performance notice), `walk/` (HUD panel, move hint, virtual joystick, walk prompt, controls hint, input facade)
+- Key files: `src/ui/chrome/createHeader.js` (syncText + page-lifetime subscription), `src/ui/chrome/createAboutPanel.js` (data-i18n walker pattern)
 
 **`src/world/`:**
 - Purpose: everything in the 3D scene
@@ -123,13 +131,14 @@ cyberpunk-malaya/
 ## Key File Locations
 
 **Entry Points:**
-- `index.html`: single HTML shell; mounts loader overlay and `/src/main.js` module
-- `src/main.js`: `init()` composition root — all factory wiring
+- `index.html`: single HTML shell; BM static baseline (`<html lang="ms">`, hardcoded BM copy hydrated by dictionaries at runtime); mounts loader overlay and `/src/main.js` module
+- `src/main.js`: `init()` composition root — all factory wiring; `applyStaticHead()` boot call (`src/main.js:62`)
 - `src/runtime/createRenderLoop.js`: `renderFrame()` — the per-frame entry
+- `src/i18n/i18n.js`: language store — module-eval restore from localStorage, `t()` used by ~15 UI factories
 
 **Configuration:**
 - `vite.config.js`: HTTPS dev server (WebGPU requirement), inspector extension middleware
-- `package.json`: scripts `dev`/`build`/`preview`/`deploy` (Vercel); deps: three ^0.185, gsap, three-mesh-bvh
+- `package.json`: scripts `dev`/`build`/`check:i18n`/`preview`/`deploy` (Vercel); deps: three ^0.185, gsap, three-mesh-bvh
 - `src/world/features.js`: `FEATURES` flags + `STRIP_ORDER`
 - `src/platform/performanceProfile.js`: every perf budget knob
 - `.cursor/rules/tsl-webgpu-shaders.mdc`, `.cursor/rules/project-context.mdc`: editor rules
@@ -140,30 +149,32 @@ cyberpunk-malaya/
 - `src/runtime/createRenderLoop.js`: frame ordering
 - `src/controls/createWalkControls.js`: walk mechanics
 - `src/world/weather/createCollisionRain.js` + `createCollisionHeight.js`: GPU rain collision
+- `src/i18n/i18n.js` + `src/i18n/dictionaries/*.js`: UI copy source of truth
 
 **Testing:**
-- None — no test files, no test runner, no test config anywhere in the repo. Verification is manual per AGENTS.md checklist (`npm run build`, dev-server WebGPU checks)
+- No test runner — verification is `npm run build`, `npm run check:i18n` (dictionary parity gate, `scripts/check-i18n-parity.mjs`), and the manual AGENTS.md checklist (dev-server WebGPU checks)
 
 ## Naming Conventions
 
 **Files:**
-- camelCase, `.js`, prefixed by role: `createX.js` for factories (`createWorld.js`, `createRenderLoop.js`), `applyX.js` for material/effect wirers (`applyCarSurfaceRain.js`, `applyBillboardMaterials.js`), bare noun for data/singletons (`features.js`, `performanceProfile.js`, `audioState.js`, `bvh.js`), `X.css` co-located with its JS in `src/ui/`
-- Exceptions: `postprocessing.js`, `warmup.js`, `edgeChromaticAberration.js` (single-instance modules)
+- camelCase, `.js`, prefixed by role: `createX.js` for factories (`createWorld.js`, `createRenderLoop.js`), `applyX.js` for material/effect wirers (`applyCarSurfaceRain.js`, `applyBillboardMaterials.js`), bare noun for data/singletons (`features.js`, `performanceProfile.js`, `audioState.js`, `i18n.js`, `bvh.js`), `X.css` co-located with its JS in `src/ui/`
+- Exceptions: `postprocessing.js`, `warmup.js`, `edgeChromaticAberration.js` (single-instance modules); `staticHead.js` (single action function, not a factory)
 
 **Directories:**
-- camelCase by layer/domain: `world/`, `post/`, `runtime/`, `platform/`, `tsl/`, `ui/`, `debug/`, `bootstrap/`, `controls/`, `audio/`, `clouds/`, `app/`, `intro/`
+- camelCase by layer/domain: `world/`, `post/`, `runtime/`, `platform/`, `i18n/`, `tsl/`, `ui/`, `debug/`, `bootstrap/`, `controls/`, `audio/`, `clouds/`, `app/`, `intro/`
 - Domain subfolders inside `world/` mirror scene entities: `car/`, `city/`, `ground/`, `weather/`, `billboards/`, `effects/`, `loaders/`
 - `src/ui/` mirrors UI zones: `core/`, `chrome/`, `intro/`, `walk/`
+- Top-level `scripts/` holds Node-run verification scripts (not browser code)
 
 **Exports:**
-- One main `createX(deps)` named export per factory module; small helper extras allowed (`createLightingController` alongside `createWorld`, `attachDevAudio` alongside `createDevAppApi`)
+- One main `createX(deps)` named export per factory module; small helper extras allowed (`createLightingController` alongside `createWorld`, `attachDevAudio` alongside `createDevAppApi`); `src/i18n/i18n.js` exports a set of store functions (`t`, `getLanguage`, `setLanguage`, `subscribe`)
 
 ## Where to Add New Code
 
 **New Feature (scene object / asset):**
 - Primary code: `src/world/createX/` folder or files under `src/world/`, registered in `src/world/createWorld.js` behind a `FEATURES` flag added to `src/world/features.js` (plus `STRIP_ORDER` if strippable)
 - Asset: drop GLB/textures into `public/models/` / `public/textures/`; load via `src/world/loaders/createGltfLoaders.js`
-- Tests: none exist — verify with `npm run build` + dev-server checklist in AGENTS.md
+- Tests: none exist — verify with `npm run build` + `npm run check:i18n` (if copy changed) + dev-server checklist in AGENTS.md
 
 **New reusable TSL shader node:**
 - Implementation: `src/tsl/newNode.js` (import from `three/tsl` only, no GLSL)
@@ -178,9 +189,20 @@ cyberpunk-malaya/
 
 **New UI element:**
 - `src/ui/<zone>/createX.js` + co-located `x.css`; aggregate in `src/app/createAppShell.js`
+- Mandatory i18n steps: add keys to BOTH `src/i18n/dictionaries/bm.js` and `src/i18n/dictionaries/en.js` (alphabetical, one key per line, keep parity); build initial markup with `t("key")`; register `const unsubscribeLanguage = subscribe(syncText)` where `syncText` writes `textContent`/`setAttribute` (or tag elements with `data-i18n` / `data-i18n-aria` and walk them with `root.querySelectorAll` — see `src/ui/chrome/createAboutPanel.js:93-102`); call `unsubscribeLanguage?.()` in `destroy()` if the factory has one
+- Any new copy-bearing factory MUST import from `src/i18n/i18n.js` — never hardcode user-visible strings
+
+**New dictionary key:**
+- Append (alphabetical, one per line) to both `src/i18n/dictionaries/bm.js` and `src/i18n/dictionaries/en.js`; verify with `npm run check:i18n`; head/meta keys go under `meta.*` and must also be wired in `src/i18n/staticHead.js` SELECTOR_MAP if a new node
+
+**New language (beyond bm/en):**
+- Add `src/i18n/dictionaries/<code>.js`, register in `DICTIONARIES` (`src/i18n/i18n.js:14`), extend the `document.documentElement.lang` mapping, and extend `scripts/check-i18n-parity.mjs` to three-way parity
 
 **New perf knob:**
 - `src/platform/performanceProfile.js`; apply via `pipeline.perf.setXxx()` pattern in `applyPerformanceProfileToPipeline`
+
+**New verification script:**
+- `scripts/<check-name>.mjs`, Node-native ESM, no dependencies; register as an npm script in `package.json` (pattern: `check:i18n`)
 
 **Utilities:**
 - Shared helpers: `src/world/loaders/meshUtils.js` (mesh traversal), `src/ui/core/` (icons, state); no general `utils/` dump — place helpers next to their consumer
@@ -195,6 +217,11 @@ cyberpunk-malaya/
 **`public/libs/`:**
 - Purpose: Draco + Basis WASM decoders referenced by `src/world/loaders/createGltfLoaders.js` via decoder path config
 - Generated: No (vendored)
+- Committed: Yes
+
+**`scripts/`:**
+- Purpose: Node-run verification gates (dictionary parity)
+- Generated: No
 - Committed: Yes
 
 **`docs/techniques/`:**
@@ -214,4 +241,4 @@ cyberpunk-malaya/
 
 ---
 
-*Structure analysis: 2026-11-22*
+*Structure analysis: 2026-11-23*
