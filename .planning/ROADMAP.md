@@ -66,7 +66,7 @@ Plans:
 - [x] 02-02-PLAN.md — KL intro story dictionaries + overlay syncText (owner replaced story; credits auto-scroll; fork URL identity)
 
 **Wave 3** *(blocked on Wave 2 completion)*
-- [ ] 02-03-PLAN.md — Language hint toast (trigger/dismiss/persist) wired after revealAppUi
+- [x] 02-03-PLAN.md — Language hint toast (trigger/dismiss/persist) wired after revealAppUi
 **UI hint**: yes
 
 ### Phase 3: Malay TTS Narration
@@ -103,6 +103,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. i18n Foundation | 4/4 | Complete    | 2026-11-23 |
-| 2. Language Toggle & KL Intro Story | 0/TBD | Not started | - |
+| 2. Language Toggle & KL Intro Story | 3/3 | Complete | 2026-11-23 |
 | 3. Malay TTS Narration | 0/TBD | Not started | - |
 | 4. Guaranteed Narration Asset | 0/TBD | Not started | - |

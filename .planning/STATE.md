@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 2
 current_phase_name: Language Toggle & KL Intro Story
 status: executing
-stopped_at: Phase 2 plan 02-02 complete — next wave 02-03
-last_updated: "2026-11-23T00:00:00.000Z"
+stopped_at: Phase 2 complete — all 3 plans executed (02-03 language hint toast done)
+last_updated: "2026-11-23T05:20:00.000Z"
 last_activity: 2026-11-23
-last_activity_desc: Plan 02-02 executed — owner story rewrite + credits auto-scroll + fork URL identity
-state_head: 3cad8f6
+last_activity_desc: Plan 02-03 executed — language hint toast (trigger/dismiss/persist) wired after revealAppUi; Phase 2 complete
+state_head: 2f5fa02
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 7
-  completed_plans: 6
-  percent: 34
+  completed_plans: 7
+  percent: 40
 ---
 
 # Project State
@@ -28,16 +28,16 @@ See: .planning/PROJECT.md (updated 2026-11-22)
 ## Current Position
 
 Phase: 2 (Language Toggle & KL Intro Story) — EXECUTING
-Plan: 02-02 complete — next wave: 02-03 (language hint toast)
-Status: Ready to execute 02-03
-Last activity: 2026-11-23 — Plan 02-02 executed (owner story l01..l49 + credits auto-scroll + fork URL identity)
+Plan: 02-03 complete — Phase 2 fully executed
+Status: Phase 2 complete — ready for Phase 2 verify / audit, then Phase 3
+Last activity: 2026-11-23 — Plan 02-03 executed (language hint toast, hint-dismissed persistence, phase-close hygiene gates)
 
-Progress: [███░░░░░░░] 34%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 7
 - Average duration: -
 - Total execution time: -
 
@@ -46,7 +46,7 @@ Progress: [███░░░░░░░] 34%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 | 4 | - | - |
-| 2 | 1 | 3 | 1 |
+| 2 | 3 | 62min | ~21min |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -63,6 +63,7 @@ Progress: [███░░░░░░░] 34%
 | Phase 01 P04 | ~25 min | 3 tasks | 5 files |
 | Phase 02 P01 | 9min | 3 tasks | 6 files |
 | Phase 02 P02 | ~20min | 3 tasks | 7 files |
+| Phase 02 P03 | ~35min | 3 tasks | 7 files |
 
 ## Accumulated Context
 

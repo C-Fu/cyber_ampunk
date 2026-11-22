@@ -19,7 +19,7 @@
 - [ ] **LANG-01**: A plain "BM | EN" text toggle (no flags, no dropdown) is available in the header/settings area
 - [ ] **LANG-02**: Language choice persists to `localStorage` (following the `src/platform/userPreferences.js` pattern) and is restored on next visit
 - [x] **LANG-03**: Every string exists in both BM and EN dictionaries — full parity, verified by toggling (the switch itself is the parity test)
-- [ ] **LANG-04**: First visit always starts in BM regardless of browser language; a dismissible hint suggests switching when the browser language is neither `ms` nor `id`
+- [x] **LANG-04**: First visit always starts in BM regardless of browser language; a dismissible hint suggests switching when the browser language is neither `ms` nor `id`
 
 ### Intro Story
 
@@ -67,7 +67,7 @@
 | LANG-01 | Phase 2 | Pending |
 | LANG-02 | Phase 2 | Pending |
 | LANG-03 | Phase 1 | Complete |
-| LANG-04 | Phase 2 | Pending |
+| LANG-04 | Phase 2 | Complete |
 | INTRO-01 | Phase 2 | Pending |
 | INTRO-02 | Phase 2 | Pending |
 | TTS-01 | Phase 3 | Pending |
