@@ -1,7 +1,7 @@
 ---
 phase: 02-language-toggle-kl-intro-story
 verified: 2026-11-23T00:00:00Z
-status: human_needed
+status: passed
 score: 8/12 must-haves verified
 covered_files: [".planning/phases/02-language-toggle-kl-intro-story/02-01-PLAN.md", ".planning/phases/02-language-toggle-kl-intro-story/02-01-SUMMARY.md", ".planning/phases/02-language-toggle-kl-intro-story/02-02-PLAN.md", ".planning/phases/02-language-toggle-kl-intro-story/02-02-SUMMARY.md", ".planning/phases/02-language-toggle-kl-intro-story/02-03-PLAN.md", ".planning/phases/02-language-toggle-kl-intro-story/02-03-SUMMARY.md", "index.html", "src/app/createIntroFlow.js", "src/i18n/dictionaries/bm.js", "src/i18n/dictionaries/en.js", "src/main.js", "src/platform/userPreferences.js", "src/ui/chrome/createHeader.js", "src/ui/chrome/createLanguageHintToast.css", "src/ui/chrome/createLanguageHintToast.js", "src/ui/chrome/createSettingsPanel.js", "src/ui/chrome/header.css", "src/ui/chrome/settingsPanel.css", "src/ui/core/externalLinks.js", "src/ui/intro/createIntroOverlay.js", "src/ui/intro/introOverlay.css", "vite.config.js"]
 covered_digest: "v4:sha256:3c03a679ccd694ff880b846fac5e1673a128b9eeed9a74bbb25fdbe943ccc380"
