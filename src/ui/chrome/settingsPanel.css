@@ -136,6 +136,33 @@
   gap: 10px;
 }
 
+/* Language row (TG-7/SR-1): same two-column grid shape as .settings-look-grid,
+   compact segment buttons instead of the tall preset cards. */
+.settings-lang-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.settings-lang-grid .settings-look-btn {
+  min-height: 44px;
+  padding: 10px 14px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cyber-text-muted);
+  cursor: pointer;
+}
+
+.settings-lang-grid .settings-look-btn--active {
+  color: rgba(255, 255, 255, 0.96);
+}
+
 .settings-look-btn {
   display: flex;
   flex-direction: column;

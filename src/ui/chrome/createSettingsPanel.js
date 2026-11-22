@@ -1,5 +1,6 @@
 import "./settingsPanel.css";
-import { t, subscribe } from "../../i18n/i18n.js";
+import { getLanguage, setLanguage, t, subscribe } from "../../i18n/i18n.js";
+import { setStoredLanguage } from "../../platform/userPreferences.js";
 import {
   phosphorArrowCounterClockwise,
   phosphorX,
@@ -55,6 +56,26 @@ export function createSettingsPanel({
 
         <div class="settings-divider" role="separator"></div>
 
+        <div class="settings-section">
+          <p class="settings-section-title">${t("settings.language")}</p>
+          <div class="settings-lang-grid" role="group" aria-label="${t("settings.language")}">
+            <button
+              type="button"
+              class="settings-look-btn"
+              data-lang="bm"
+              aria-pressed="false"
+            >BM</button>
+            <button
+              type="button"
+              class="settings-look-btn"
+              data-lang="en"
+              aria-pressed="false"
+            >EN</button>
+          </div>
+        </div>
+
+        <div class="settings-divider" role="separator"></div>
+
         <label class="settings-option">
           <span class="settings-option-text">
             <span class="settings-option-title">${t("settings.developmentMode")}</span>
@@ -92,6 +113,8 @@ export function createSettingsPanel({
   const restartHint = root.querySelector(".settings-restart-hint");
   const lookButtons = [...root.querySelectorAll("[data-look-preset]")];
   const lookOptionIds = new Set(lookOptions.map((option) => option.id));
+  const langSectionTitle = root.querySelector(".settings-lang-grid").previousElementSibling;
+  const langButtons = [...root.querySelectorAll("[data-lang]")];
 
   function syncDevelopmentMode(enabled) {
     devToggle.checked = Boolean(enabled);
@@ -104,14 +127,35 @@ export function createSettingsPanel({
     closeButton.setAttribute("aria-label", t("settings.close"));
     sectionTitle.textContent = t("settings.look");
     lookGrid.setAttribute("aria-label", t("settings.lookAria"));
+    langSectionTitle.textContent = t("settings.language");
     devTitle.textContent = t("settings.developmentMode");
     devToggle.setAttribute("aria-label", t("settings.developmentModeAria"));
     restartLabel.textContent = t("settings.resetConfigs");
     restartHint.textContent = t("settings.resetHint");
 
+    const currentLanguage = getLanguage();
+    for (const button of langButtons) {
+      const ariaKey =
+        button.dataset.lang === "bm" ? "settings.langBmAria" : "settings.langEnAria";
+      button.setAttribute("aria-label", t(ariaKey));
+      button.setAttribute(
+        "aria-pressed",
+        currentLanguage === button.dataset.lang ? "true" : "false",
+      );
+    }
+
     for (const button of lookButtons) {
       const label = button.querySelector(".settings-look-label");
       label.textContent = t("look." + button.dataset.lookPreset);
+    }
+  }
+
+  function syncLanguageSelection() {
+    const currentLanguage = getLanguage();
+    for (const button of langButtons) {
+      const selected = currentLanguage === button.dataset.lang;
+      button.classList.toggle("settings-look-btn--active", selected);
+      button.setAttribute("aria-pressed", selected ? "true" : "false");
     }
   }
 
@@ -171,6 +215,20 @@ export function createSettingsPanel({
     });
   }
 
+  for (const button of langButtons) {
+    // Persist-first (LANG-02/D-03) — identical to the header pill handler.
+    // Clicking the already-active segment is a harmless no-op (setLanguage
+    // early-returns on same language).
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      state?.showAllUi?.();
+      const language = button.dataset.lang;
+      setStoredLanguage(language);
+      setLanguage(language);
+      syncLanguageSelection();
+    });
+  }
+
   devToggle.addEventListener("change", () => {
     onDevelopmentModeChange?.(devToggle.checked);
   });
@@ -204,6 +262,8 @@ export function createSettingsPanel({
   });
 
   const unsubscribeLanguage = subscribe(syncText);
+
+  syncLanguageSelection();
 
   document.body.appendChild(root);
 
