@@ -1,4 +1,5 @@
 import "./aboutPanel.css";
+import { t, subscribe } from "../../i18n/i18n.js";
 import { isMobileLayout, onMobileLayoutChange } from "../../platform/deviceLayout.js";
 import { SOURCE_CODE_URL } from "../core/externalLinks.js";
 
@@ -19,38 +20,32 @@ export function createAboutPanel({ state } = {}) {
   root.className = "about-overlay";
   root.hidden = true;
   root.innerHTML = `
-    <button type="button" class="close-button-panel" aria-label="Close">
+    <button type="button" class="close-button-panel" aria-label="${t("about.close")}" data-i18n-aria="about.close">
       ${CLOSE_ICON}
     </button>
 
     <div class="about-content">
       <div class="about-body">
         <div class="about-brand">
+          <!-- Brand name threejs-punk stays hardcoded in both languages (Pitfall 3). -->
           <p class="about-brand-title">THREEJS-PUNK</p>
           <small class="about-brand-subtitle">BY ANDERSON MANCINI &amp; SUNAG</small>
         </div>
         <div class="about-copy">
           <div class="about-copy-col">
-            <p class="about-lead">
-              Threejs-Punk drops you into a rain-soaked alley somewhere between a Blade
-              Runner backlot and a boot sequence — neon signs, wet asphalt, and a city
-              that never quite turns off its lights.
+            <p class="about-lead" data-i18n="about.lead1">
+              ${t("about.lead1")}
             </p>
-            <p class="about-lead">
-              Every reflection, droplet and glow you see is rendered live with Three.js
-              WebGPU and TSL — no pre-baked tricks, just shaders doing the heavy lifting
-              in real time.
+            <p class="about-lead" data-i18n="about.lead2">
+              ${t("about.lead2")}
             </p>
           </div>
           <div class="about-copy-col">
-            <p class="about-lead">
-              That flickering readout in the corner is set dressing: a fake vitals HUD
-              borrowed from the same retro-future aesthetic, just to make the night feel
-              a little more alive.
+            <p class="about-lead" data-i18n="about.lead3">
+              ${t("about.lead3")}
             </p>
-            <p class="about-lead">
-              Originally built for the Three.js Conference — a small invitation to
-              wander, look up, and let the rain do the storytelling.
+            <p class="about-lead" data-i18n="about.lead4">
+              ${t("about.lead4")}
             </p>
           </div>
         </div>
@@ -64,25 +59,20 @@ export function createAboutPanel({ state } = {}) {
           <button type="button" class="refresh-button-panel about-link-sunag">
             Sunag
           </button>
-          <button type="button" class="refresh-button-panel about-link-source">
-            Source code
+          <button type="button" class="refresh-button-panel about-link-source" data-i18n="about.sourceLink">
+            ${t("about.sourceLink")}
           </button>
         </div>
         <p class="about-model-credits">
           By Anderson Mancini &amp; Sunag
         </p>
         <p class="about-recommended about-recommended--desktop">
-          <span class="about-recommended-title">Recommended setup</span>
-          GPU power and 16 GB RAM are what matter most. Mac: M2 or newer.
-          PC: discrete GPU, 16 GB RAM.
-          Chrome or Edge (latest) · WebGPU required · 1080p fullscreen (4K scales down automatically).
-          WASD + Shift sprint · click to look · Settings for Look · headphones recommended.
+          <span class="about-recommended-title" data-i18n="about.recommendedTitle">${t("about.recommendedTitle")}</span>
+          <span data-i18n="about.recommendedDesktop">${t("about.recommendedDesktop")}</span>
         </p>
         <p class="about-recommended about-recommended--mobile">
-          <span class="about-recommended-title">Recommended setup</span>
-          iPhone 15 or newer · Android: 2023 flagship or newer (Snapdragon 8 Gen 2 / equivalent, 8 GB RAM).
-          Chrome (latest) · WebGPU required · landscape orientation.
-          On-screen joystick · Settings for Look · headphones recommended.
+          <span class="about-recommended-title" data-i18n="about.recommendedTitle">${t("about.recommendedTitle")}</span>
+          <span data-i18n="about.recommendedMobile">${t("about.recommendedMobile")}</span>
         </p>
       </div>
     </div>
@@ -101,8 +91,22 @@ export function createAboutPanel({ state } = {}) {
     mobileRecommended.hidden = !mobile;
   }
 
+  // D-04 walker: dictionary values reach the DOM ONLY via textContent —
+  // never an innerHTML write. dataset.i18n is a dictionary key; unknown
+  // keys hit the D-08 missing-key path.
+  function syncText() {
+    for (const el of root.querySelectorAll("[data-i18n]")) {
+      el.textContent = t(el.dataset.i18n);
+    }
+
+    for (const el of root.querySelectorAll("[data-i18n-aria]")) {
+      el.setAttribute("aria-label", t(el.dataset.i18nAria));
+    }
+  }
+
   syncRecommendedVisibility();
   const unsubscribeLayout = onMobileLayoutChange(syncRecommendedVisibility);
+  const unsubscribeLanguage = subscribe(syncText);
 
   function open() {
     root.classList.remove("about-overlay--force-hidden");
@@ -161,6 +165,7 @@ export function createAboutPanel({ state } = {}) {
     close,
     setForceHidden,
     destroy() {
+      unsubscribeLanguage?.();
       unsubscribeLayout?.();
       document.removeEventListener("keydown", onKeyDown);
       root.remove();

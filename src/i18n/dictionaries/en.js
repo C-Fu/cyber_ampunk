@@ -3,6 +3,15 @@
  * (D-10). Values are the pre-localization hardcoded strings verbatim.
  */
 export const en = {
+  "about.close": "Close",
+  "about.lead1": "Threejs-Punk drops you into a rain-soaked alley somewhere between a Blade Runner backlot and a boot sequence — neon signs, wet asphalt, and a city that never quite turns off its lights.",
+  "about.lead2": "Every reflection, droplet and glow you see is rendered live with Three.js WebGPU and TSL — no pre-baked tricks, just shaders doing the heavy lifting in real time.",
+  "about.lead3": "That flickering readout in the corner is set dressing: a fake vitals HUD borrowed from the same retro-future aesthetic, just to make the night feel a little more alive.",
+  "about.lead4": "Originally built for the Three.js Conference — a small invitation to wander, look up, and let the rain do the storytelling.",
+  "about.recommendedDesktop": "GPU power and 16 GB RAM are what matter most. Mac: M2 or newer. PC: discrete GPU, 16 GB RAM. Chrome or Edge (latest) · WebGPU required · 1080p fullscreen (4K scales down automatically). WASD + Shift sprint · click to look · Settings for Look · headphones recommended.",
+  "about.recommendedMobile": "iPhone 15 or newer · Android: 2023 flagship or newer (Snapdragon 8 Gen 2 / equivalent, 8 GB RAM). Chrome (latest) · WebGPU required · landscape orientation. On-screen joystick · Settings for Look · headphones recommended.",
+  "about.recommendedTitle": "Recommended setup",
+  "about.sourceLink": "Source code",
   "audio.toggle": "Toggle sound",
   "hud.energy": "ENERGY",
   "hud.signal": "SIGNAL",

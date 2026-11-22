@@ -4,6 +4,15 @@
  * the owner reviews and corrects wording here.
  */
 export const bm = {
+  "about.close": "Tutup",
+  "about.lead1": "Threejs-Punk membawa anda ke lorong diguyur hujan di antara set belakang ala Blade Runner dan jujukan but — papan tanda neon, asfalt basah, dan sebuah bandar yang tidak pernah benar-benar memadamkan lampunya.",
+  "about.lead2": "Setiap pantulan, titisan dan kerlipan yang anda lihat dilukis secara langsung dengan Three.js WebGPU dan TSL — tiada helah pra-bakar, hanya shader yang menanggung kerja berat dalam masa nyata.",
+  "about.lead3": "Paparan berkerlip di penjuru itu hiasan set: HUD vital palsu yang dipinjam daripada estetika retro-masa-depan yang sama, semata-mata untuk menjadikan malam ini terasa lebih hidup.",
+  "about.lead4": "Asalnya dibina untuk Three.js Conference — satu jemputan kecil untuk berkeliaran, menoleh ke atas, dan membiarkan hujan yang bercerita.",
+  "about.recommendedDesktop": "Kuasa GPU dan 16 GB RAM paling penting. Mac: M2 atau lebih baharu. PC: GPU diskrit, 16 GB RAM. Chrome atau Edge (terkini) · WebGPU diperlukan · skrin penuh 1080p (4K diskala turun secara automatik). WASD + Shift untuk lari · klik untuk melihat · Tetapan untuk Penampilan · fon kepala disyorkan.",
+  "about.recommendedMobile": "iPhone 15 atau lebih baharu · Android: model flagship 2023 atau lebih baharu (Snapdragon 8 Gen 2 / setara, 8 GB RAM). Chrome (terkini) · WebGPU diperlukan · orientasi landskap. Kayu bedik pada skrin · Tetapan untuk Penampilan · fon kepala disyorkan.",
+  "about.recommendedTitle": "Sediaan disyorkan",
+  "about.sourceLink": "Kod sumber",
   "audio.toggle": "Togol bunyi",
   "hud.energy": "Tenaga",
   "hud.signal": "Isyarat",
