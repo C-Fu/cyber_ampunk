@@ -1,4 +1,5 @@
 import "./walkControlsHint.css";
+import { t, subscribe } from "../../i18n/i18n.js";
 import { isDesktopPointerLayout } from "../../platform/deviceLayout.js";
 
 const CLOSE_ICON = `
@@ -47,14 +48,14 @@ function renderMouse(x, y, scale = 1, active = false) {
   `;
 }
 
-function renderCallout(x, y, width, title, copy) {
+function renderCallout(x, y, width, titleKey, copyKey) {
   const centerX = x + width / 2;
 
   return `
     <g class="walk-callout">
       <line class="walk-callout-accent" x1="${centerX - 16}" y1="${y}" x2="${centerX + 16}" y2="${y}" />
-      <text class="walk-callout-title" x="${centerX}" y="${y + 22}">${title}</text>
-      <text class="walk-callout-copy" x="${centerX}" y="${y + 40}">${copy}</text>
+      <text class="walk-callout-title" x="${centerX}" y="${y + 22}" data-i18n="${titleKey}">${t(titleKey)}</text>
+      <text class="walk-callout-copy" x="${centerX}" y="${y + 40}" data-i18n="${copyKey}">${t(copyKey)}</text>
     </g>
   `;
 }
@@ -71,16 +72,16 @@ function renderExpandedDiagram() {
   const crouchSize = 40;
 
   return `
-    <svg class="walk-controls__diagram" viewBox="0 0 860 440" role="img" aria-label="Walk mode controls">
+    <svg class="walk-controls__diagram" viewBox="0 0 860 440" role="img" aria-label="${t("walkControls.diagramAria")}">
       <line class="walk-leader" x1="430" y1="78" x2="${clusterX + keySize + gap}" y2="${clusterY - 6}" />
       <line class="walk-leader" x1="132" y1="248" x2="${shiftX + 24}" y2="${bottomY + 12}" />
       <line class="walk-leader" x1="430" y1="368" x2="${crouchX + crouchSize / 2}" y2="${bottomY + crouchSize}" />
       <line class="walk-leader" x1="706" y1="248" x2="620" y2="220" />
 
-      ${renderCallout(318, 18, 224, "Movement", "WASD to move")}
-      ${renderCallout(38, 220, 188, "Sprint", "Hold Shift")}
-      ${renderCallout(318, 348, 224, "Crouch", "Press C to toggle")}
-      ${renderCallout(634, 220, 188, "Look", "Click to lock mouse")}
+      ${renderCallout(318, 18, 224, "walkControls.calloutMoveTitle", "walkControls.calloutMoveBody")}
+      ${renderCallout(38, 220, 188, "walkControls.calloutSprintTitle", "walkControls.calloutSprintBody")}
+      ${renderCallout(318, 348, 224, "walkControls.calloutCrouchTitle", "walkControls.calloutCrouchBody")}
+      ${renderCallout(634, 220, 188, "walkControls.calloutLookTitle", "walkControls.calloutLookBody")}
 
       ${renderKey(clusterX + keySize + gap, clusterY, keySize, keySize, "W", true)}
       ${renderKey(clusterX, clusterY + keySize + gap, keySize, keySize, "A", true)}
@@ -99,23 +100,23 @@ export function createWalkControlsHint({ state, domElement } = {}) {
   root.className = "walk-controls walk-controls--hidden";
   root.setAttribute("data-ui-block-look", "true");
   root.innerHTML = `
-    <button type="button" class="walk-controls__chip" aria-label="Show walk controls" aria-expanded="false">
+    <button type="button" class="walk-controls__chip" aria-label="${t("walkControls.chipAria")}" aria-expanded="false">
       ${CHIP_ICON}
-      <span class="walk-controls__chip-label">Controls</span>
+      <span class="walk-controls__chip-label">${t("walkControls.chipLabel")}</span>
     </button>
 
     <div class="walk-controls__overlay" hidden>
       <div class="walk-controls__backdrop" data-close="true"></div>
-      <button type="button" class="walk-controls__close" aria-label="Close controls">
+      <button type="button" class="walk-controls__close" aria-label="${t("walkControls.closeAria")}">
         ${CLOSE_ICON}
       </button>
-      <div class="walk-controls__content" role="dialog" aria-modal="true" aria-label="Walk controls">
+      <div class="walk-controls__content" role="dialog" aria-modal="true" aria-label="${t("walkControls.contentAria")}">
         <header class="walk-controls__header">
-          <p class="walk-controls__eyebrow">Interface</p>
-          <h2 class="walk-controls__title">Navigation</h2>
+          <p class="walk-controls__eyebrow">${t("walkControls.eyebrow")}</p>
+          <h2 class="walk-controls__title">${t("walkControls.title")}</h2>
         </header>
         ${renderExpandedDiagram()}
-        <p class="walk-controls__footer">Esc to close</p>
+        <p class="walk-controls__footer">${t("walkControls.footer")}</p>
       </div>
     </div>
   `;
@@ -125,6 +126,34 @@ export function createWalkControlsHint({ state, domElement } = {}) {
   const overlay = root.querySelector(".walk-controls__overlay");
   const backdrop = root.querySelector(".walk-controls__backdrop");
   const closeButton = root.querySelector(".walk-controls__close");
+  const chipLabel = root.querySelector(".walk-controls__chip-label");
+  const eyebrow = root.querySelector(".walk-controls__eyebrow");
+  const title = root.querySelector(".walk-controls__title");
+  const footer = root.querySelector(".walk-controls__footer");
+  const contentDialog = root.querySelector(".walk-controls__content");
+  const diagram = root.querySelector(".walk-controls__diagram");
+
+  // D-04 walker shape (same as createAboutPanel): textContent writes only.
+  // It covers the SVG <text> callout nodes carrying data-i18n (callout title
+  // and copy: data-i18n on each of the 8 callout text nodes — move/sprint/
+  // crouch/look title + body pairs) — textContent works on SVG elements.
+  // Static walker consumers of data-i18n: the SVG callout text nodes, the
+  // diagram aria, plus these data-i18n callouts reused by syncText: title
+  // and copy per callout — data-i18n is the single source for the walker.
+  function syncText() {
+    chipLabel.textContent = t("walkControls.chipLabel");
+    chip.setAttribute("aria-label", t("walkControls.chipAria"));
+    closeButton.setAttribute("aria-label", t("walkControls.closeAria"));
+    contentDialog.setAttribute("aria-label", t("walkControls.contentAria"));
+    diagram.setAttribute("aria-label", t("walkControls.diagramAria"));
+    eyebrow.textContent = t("walkControls.eyebrow");
+    title.textContent = t("walkControls.title");
+    footer.textContent = t("walkControls.footer");
+
+    for (const el of root.querySelectorAll("[data-i18n]")) {
+      el.textContent = t(el.dataset.i18n);
+    }
+  }
 
   let walkModeVisible = false;
   let forceHidden = false;
@@ -185,6 +214,7 @@ export function createWalkControlsHint({ state, domElement } = {}) {
   }
 
   const unsubscribeState = state?.subscribe?.(onStateChange);
+  const unsubscribeLanguage = subscribe(syncText);
 
   function onOverlayKeyDown(event) {
     if (event.code === "Escape" && overlayOpen) {
@@ -212,6 +242,7 @@ export function createWalkControlsHint({ state, domElement } = {}) {
   }
 
   function destroy() {
+    unsubscribeLanguage?.();
     closeOverlay();
     unsubscribeState?.();
     window.removeEventListener("keydown", onOverlayKeyDown);
