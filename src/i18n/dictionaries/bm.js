@@ -4,6 +4,9 @@
  * the owner reviews and corrects wording here.
  */
 export const bm = {
+  "intro.enter": "MASUK",
+  "intro.kicker": "melepasi kaca",
+  "intro.tagline": "Lorak basah hujan di bawah neon.",
   "loader.ariaLoading": "Memuatkan {percent}%. {status}",
   "loader.ariaLoadingInitial": "Memuatkan",
   "loader.ariaPercent": "Memuatkan {percent}%",
@@ -26,6 +29,7 @@ export const bm = {
   "meta.twitterDescription": "Jelajahi lorong siberpunk hujan dengan WebGPU dan Three.js. Pantulan neon, hujan sinematik dan pasca-pemprosesan masa nyata dalam adegan bandar malam.",
   "meta.twitterImageAlt": "Cyberpunk Malaya — lorong hujan siberpunk dengan lampu neon dan suasana sinematik",
   "meta.twitterTitle": "Cyberpunk Malaya - Adegan hujan siberpunk oleh Anderson Mancini dan Sunag",
+  "performanceNotice.adjusting": "Melaraskan prestasi…",
   "walkPrompt.clickToActivate": "Klik untuk aktifkan mod berjalan",
   "walkPrompt.clickToLook": "Klik untuk melihat sekeliling",
   "walkPrompt.dragToLook": "Seret untuk melihat sekeliling",

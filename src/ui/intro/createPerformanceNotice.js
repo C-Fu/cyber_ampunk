@@ -1,7 +1,8 @@
 import "./performanceNotice.css";
+import { t } from "../../i18n/i18n.js";
 
 export function createPerformanceNotice({
-  message = "Adjusting performance",
+  message = t("performanceNotice.adjusting"),
 } = {}) {
   const root = document.createElement("p");
   root.className = "performance-notice";

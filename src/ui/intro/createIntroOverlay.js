@@ -1,5 +1,6 @@
 import "./introOverlay.css";
 import gsap from "gsap";
+import { t } from "../../i18n/i18n.js";
 
 function splitIntoLetters(element, className = "intro-letter") {
   const text = element.textContent.trim();
@@ -22,15 +23,15 @@ export function createIntroOverlay({ onStart } = {}) {
   root.setAttribute("aria-hidden", "false");
   root.innerHTML = `
     <div class="intro-stack">
-      <p class="intro-kicker">through the glass</p>
+      <p class="intro-kicker">${t("intro.kicker")}</p>
       <h1 class="intro-brand" aria-label="THREEJS-PUNK">
         <span class="intro-brand-line">THREEJS</span>
         <span class="intro-brand-line intro-brand-line--accent">PUNK</span>
       </h1>
       <p class="intro-rule" aria-hidden="true"></p>
-      <p class="intro-tagline">A rain-soaked alley under neon.</p>
+      <p class="intro-tagline">${t("intro.tagline")}</p>
       <div class="intro-actions">
-        <button type="button" class="intro-button" disabled>ENTER</button>
+        <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
       </div>
       <p class="intro-credit">Anderson Mancini · Sunag</p>
     </div>

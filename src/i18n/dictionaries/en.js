@@ -3,6 +3,9 @@
  * (D-10). Values are the pre-localization hardcoded strings verbatim.
  */
 export const en = {
+  "intro.enter": "ENTER",
+  "intro.kicker": "through the glass",
+  "intro.tagline": "A rain-soaked alley under neon.",
   "loader.ariaLoading": "Loading {percent}%. {status}",
   "loader.ariaLoadingInitial": "Loading",
   "loader.ariaPercent": "Loading {percent}%",
@@ -25,6 +28,7 @@ export const en = {
   "meta.twitterDescription": "Walk through a rainy cyberpunk alley powered by WebGPU and Three.js. Neon reflections, cinematic rain, and real-time post-processing in a night city scene.",
   "meta.twitterImageAlt": "Threejs-Punk — raining cyberpunk alley with neon lights and cinematic atmosphere",
   "meta.twitterTitle": "Threejs-Punk - Raining scene inspired in CyberPunk by Anderson Mancini and Sunag",
+  "performanceNotice.adjusting": "Adjusting performance",
   "walkPrompt.clickToActivate": "Click to activate walk mode",
   "walkPrompt.clickToLook": "Click to look around",
   "walkPrompt.dragToLook": "Drag to look around",
