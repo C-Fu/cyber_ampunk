@@ -105,6 +105,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 |----------|------|--------|-------------|-----------|
 | Feature | MISSION-01 mission system | v2 requirement | 2026-11-22 | v1 |
 | Feature | TTS-07 dynamic narration beyond intro | v2 requirement | 2026-11-22 | v1 |
+| Feature | Enter/drive the car (Ghost Runner ride) — owner request 2026-11-23; upstream shipped this as "Threejs-Punk Drive" (Rapier physics, 50+ missions, 4-driver multiplayer) which is NOT in this fork's codebase; v2 candidate: scripted spline ride first, real driving later | v2 candidate | 2026-11-23 | v1 |
+| Feature | Upstream parity features (missions, racing, multiplayer) — tracked as v2+ candidates; this fork's differentiator is the BM localization layer the upstream lacks | v2 candidate | 2026-11-23 | v1 |
 
 ## Session Continuity
 
