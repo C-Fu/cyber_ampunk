@@ -80,7 +80,13 @@ Plans:
   3. Toggling the audio button / mute cancels narration immediately
   4. Voice resolution follows the graded chain (local `ms` → network `ms-MY` → labeled `id-ID` → text-only), the UI always labels which voice is active, and the experience never silently mispronounces — text-only is the floor
   5. The currently-spoken sentence is highlighted in the intro overlay, and a replay button restarts the narration
-**Plans**: TBD — FIRST plan: offline narration synthesis (generate the ms-MY neural audio for the full story, chunk into per-line segments, bundle as asset) — no device-matrix spike needed since browser TTS is no longer the primary source; SECOND plan: narration playback module (gesture-anchored start, per-line sync with scroll + highlight, mute integration, replay button, asset-failure fallback).
+**Plans**: 2 plans
+Plans:
+**Wave 1**
+- [ ] 03-01-PLAN.md — Offline narration asset pipeline: synthesis script + integrity gate + owner Azure-provision/ear-review checkpoint (VOICE-01/02)
+
+**Wave 2** *(blocked on Wave 1 — owner-approved assets + shared intro overlay files)*
+- [ ] 03-02-PLAN.md — Narration playback module: gesture-anchored start, keepStory exit, per-line highlight, mute integration, replay button, source label, TTS fallback, scroll tuning (TTS-01..06)
 **UI hint**: yes
 
 ### Phase 4: Guaranteed Narration Asset — MERGED INTO PHASE 3 (owner decision 2026-11-23: bundled audio is the primary narration source, built directly in Phase 3)
