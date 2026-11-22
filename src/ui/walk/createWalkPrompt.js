@@ -1,5 +1,6 @@
 import "./walkPrompt.css";
 import { isCoarsePointerDevice } from "../../platform/deviceLayout.js";
+import { t, subscribe } from "../../i18n/i18n.js";
 
 /**
  * HUD tip shown whenever pointer lock is unlocked (desktop) or before the
@@ -11,7 +12,7 @@ export function createWalkPrompt({ domElement, walkControls, state } = {}) {
   root.className = "walk-prompt";
   root.setAttribute("data-ui-block-look", "true");
   root.hidden = true;
-  root.setAttribute("aria-label", "Click to activate walk mode");
+  root.setAttribute("aria-label", t("walkPrompt.clickToActivate"));
   root.innerHTML = `
     <div class="walk-prompt-frame">
       <div class="walk-prompt-pulse" aria-hidden="true"></div>
@@ -20,8 +21,8 @@ export function createWalkPrompt({ domElement, walkControls, state } = {}) {
       <span class="walk-prompt-corner walk-prompt-corner--bl"></span>
       <span class="walk-prompt-corner walk-prompt-corner--br"></span>
       <div class="walk-prompt-inner">
-        <span class="walk-prompt-kicker">Walk mode</span>
-        <span class="walk-prompt-title">Click to look around</span>
+        <span class="walk-prompt-kicker">${t("walkPrompt.kicker")}</span>
+        <span class="walk-prompt-title">${t("walkPrompt.clickToLook")}</span>
       </div>
     </div>
   `;
@@ -29,6 +30,7 @@ export function createWalkPrompt({ domElement, walkControls, state } = {}) {
   document.body.appendChild(root);
 
   const titleEl = root.querySelector(".walk-prompt-title");
+  const kickerEl = root.querySelector(".walk-prompt-kicker");
 
   let enabled = false;
   let panelOpen = Boolean(state?.openedPanel);
@@ -39,13 +41,14 @@ export function createWalkPrompt({ domElement, walkControls, state } = {}) {
   }
 
   function syncCopy() {
+    kickerEl.textContent = t("walkPrompt.kicker");
     if (isCoarsePointerDevice()) {
-      titleEl.textContent = "Drag to look around";
-      root.setAttribute("aria-label", "Drag to look around");
+      titleEl.textContent = t("walkPrompt.dragToLook");
+      root.setAttribute("aria-label", t("walkPrompt.dragToLook"));
       root.classList.add("walk-prompt--passive");
     } else {
-      titleEl.textContent = "Click to look around";
-      root.setAttribute("aria-label", "Click to activate walk mode");
+      titleEl.textContent = t("walkPrompt.clickToLook");
+      root.setAttribute("aria-label", t("walkPrompt.clickToActivate"));
       root.classList.remove("walk-prompt--passive");
     }
   }
@@ -106,6 +109,7 @@ export function createWalkPrompt({ domElement, walkControls, state } = {}) {
     panelOpen = Boolean(openedPanel);
     sync();
   });
+  const unsubscribeLanguage = subscribe(syncCopy);
 
   return {
     root,
@@ -117,6 +121,7 @@ export function createWalkPrompt({ domElement, walkControls, state } = {}) {
       setEnabled(false);
     },
     destroy() {
+      unsubscribeLanguage?.();
       unsubscribeWalk?.();
       unsubscribeState?.();
       document.removeEventListener("pointerlockchange", onPointerLockChange);
