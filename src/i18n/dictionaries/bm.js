@@ -74,7 +74,7 @@ export const bm = {
   "intro.story.l43": "Aku hidupkan enjin dan berpatah balik ke arah lautan neon yang dipanggil bandar.",
   "intro.story.l44": "Esok, berita mungkin akan bercakap tentang syarikat bernilai bilion kredit. Tentang serangan siber. Tentang kebocoran data. Tentang perang korporat yang berlaku jauh di atas kepala orang biasa.",
   "intro.story.l45": "Tapi tiada siapa akan bercakap tentang siapa yang membawa rahsia itu merentas ribut.",
-  "intro.story.l46": "Tiada siapa akan tahu nama Ghost Runner yang menunggang melalui hujan pada pukul tiga pagi.",
+  "intro.story.l46": "Tiada siapa akan tahu nama Ghost Runner yang menunggang melalui hujan tiga pagi tadi.",
   "intro.story.l47": "Dan dalam dunia ini...",
   "intro.story.l48": "Itulah satu-satunya sebab aku masih hidup.",
   "intro.story.l49": "Inilah kisahku.",

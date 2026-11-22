@@ -1,7 +1,11 @@
 /**
  * Offline Malay narration synthesis (VOICE-01): reads the 49
  * `intro.story.lNN` lines verbatim from src/i18n/dictionaries/bm.js
- * and synthesizes one mp3 per line via the Azure Speech REST endpoint.
+ * and synthesizes one android-processed mp3 per line via the Azure Speech REST endpoint.
+ * The owner-selected treatment (2026-11-23, U2 "android"): Azure serious-style SSML,
+ * then pure-Node DSP — ring modulation 90Hz/45% + 11-bit crush + echo (dry tap,
+ * decay-safe) + fixed DC blocker + limiter — encoded via lamejs (devDependency,
+ * build-time only).
  * Build-time only — nothing here runs in the browser (VOICE-02).
  *
  * Credentials come from the environment ONLY (T-3-01): SPEECH_KEY and
@@ -18,6 +22,8 @@ import { bm } from "../src/i18n/dictionaries/bm.js";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { createRequire } from "node:module";
+const lamejs = createRequire(import.meta.url)("lamejs"); // lamejs 1.2.0 CJS entry (the 1.2.1 ESM entry is broken)
 
 /** Zero-padded `lNN` key for story line i (0-based), matching STORY_KEYS. */
 function lineKey(i) {
@@ -141,6 +147,93 @@ if (unknown.length > 0) {
   process.exit(1);
 }
 
+
+// ---------------------------------------------------------------------------
+// Android voice DSP (owner treatment U2, 2026-11-23): Azure WAV -> PCM ->
+// ring-mod + crush + echo (dry tap) + DC blocker + limiter -> lamejs mp3.
+// ---------------------------------------------------------------------------
+
+/** Parse the fmt sampleRate and data chunk out of a RIFF WAVE buffer. */
+function parseWav(buf) {
+  let pos = 12;
+  let sampleRate = 24000;
+  let data = null;
+  while (pos < buf.length - 8) {
+    const id = buf.toString("ascii", pos, pos + 4);
+    const size = buf.readUInt32LE(pos + 4);
+    if (id === "fmt ") sampleRate = buf.readUInt32LE(pos + 12);
+    if (id === "data") {
+      data = buf.subarray(pos + 8, pos + 8 + size);
+      break;
+    }
+    pos += 8 + size + (size % 2);
+  }
+  return { sampleRate, data };
+}
+
+/** U2 android treatment: every knob from the owner-approved preview. */
+const ANDROID_TREATMENT = {
+  ringFreq: 90,
+  ringDepth: 0.45,
+  crushBits: 11,
+  echoMs: 55,
+  echoGain: 0.3,
+};
+
+function androidify(pcm, sampleRate, { ringFreq, ringDepth, crushBits, echoMs, echoGain }) {
+  const s = Float32Array.from(pcm, (v) => v / 32768);
+  const dry = new Float32Array(s.length); // echo taps THIS (decay-safe, no feedback loop)
+  const echoN = Math.floor((sampleRate * echoMs) / 1000);
+  const w = (2 * Math.PI * ringFreq) / sampleRate; // continuous phase (no period snapping)
+  const step = Math.pow(2, 16 - crushBits) / 65536;
+  for (let i = 0; i < s.length; i += 1) {
+    let v = s[i];
+    v *= 1 - ringDepth * (0.5 + 0.5 * Math.sin(w * i));
+    v = Math.round(v / step) * step;
+    const echoed = i >= echoN ? v + echoGain * dry[i - echoN] : v;
+    dry[i] = Math.max(-1, Math.min(1, echoed));
+  }
+  // DC blocker — standard form: y = x - xPrev + R * yPrev
+  const out = new Float32Array(dry.length);
+  const R = 0.995;
+  let xPrev = 0;
+  let yPrev = 0;
+  for (let i = 0; i < dry.length; i += 1) {
+    const v = dry[i];
+    const y = v - xPrev + R * yPrev;
+    xPrev = v;
+    yPrev = y;
+    out[i] = y;
+  }
+  // Limiter + normalize
+  let mx = 0;
+  for (let i = 0; i < out.length; i += 1) mx = Math.max(mx, Math.abs(out[i]));
+  const gain = mx > 0.9 ? 0.9 / mx : 1;
+  for (let i = 0; i < out.length; i += 1) {
+    out[i] = Math.max(-1, Math.min(1, out[i] * gain)) * 32767;
+  }
+  return out;
+}
+
+/** Encode Float32 [-1,1] samples to mp3 (mono, 24kHz, 64kbps) via lamejs. */
+function encodeMp3(samples, sampleRate) {
+  const encoder = new lamejs.Mp3Encoder(1, sampleRate, 64);
+  const chunks = [];
+  const blockSize = 1152;
+  for (let i = 0; i < samples.length; i += blockSize) {
+    const block = samples.subarray(i, i + blockSize);
+    const int16 = new Int16Array(block.length);
+    for (let j = 0; j < block.length; j += 1) {
+      int16[j] = Math.max(-32768, Math.min(32767, Math.round(block[j])));
+    }
+    const encoded = encoder.encodeBuffer(int16);
+    if (encoded.length > 0) chunks.push(Buffer.from(encoded));
+  }
+  const tail = encoder.flush();
+  if (tail.length > 0) chunks.push(Buffer.from(tail));
+  return Buffer.concat(chunks);
+}
+
 const endpoint = `https://${SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1`;
 await mkdir(outDir, { recursive: true });
 
@@ -155,7 +248,7 @@ for (const key of wantedKeys) {
   }
   const ssml =
     `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ms-MY">` +
-    `<voice name="${voice}"><prosody rate="-8%">${xmlEscape(text)}</prosody></voice></speak>`;
+    `<voice name="${voice}"><mstts:express-as xmlns:mstts="https://www.w3.org/2001/mstts" style="serious" styledegree="1.5"><prosody rate="-10%" pitch="-12%">${xmlEscape(text)}</prosody></mstts:express-as></voice></speak>`;
   let response;
   try {
     response = await fetch(endpoint, {
@@ -163,7 +256,7 @@ for (const key of wantedKeys) {
       headers: {
         "Ocp-Apim-Subscription-Key": SPEECH_KEY,
         "Content-Type": "application/ssml+xml",
-        "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+        "X-Microsoft-OutputFormat": "riff-24khz-16bit-mono-pcm",
       },
       body: ssml,
     });
@@ -175,14 +268,43 @@ for (const key of wantedKeys) {
     failures.push(`${key}: HTTP ${response.status} ${response.statusText}`);
     continue;
   }
-  const bytes = Buffer.from(await response.arrayBuffer());
+  const wav = Buffer.from(await response.arrayBuffer());
+  const { sampleRate, data } = parseWav(wav);
+  const pcm = new Int16Array(data.buffer, data.byteOffset, Math.floor(data.length / 2));
+  // Input sanity guard — never write silent/garbage output (T-3-02 companion).
+  let inMax = 0;
+  for (let i = 0; i < pcm.length; i += 1) inMax = Math.max(inMax, Math.abs(pcm[i]));
+  if (inMax < 1000) {
+    failures.push(`${key}: Azure returned near-silent audio (max ${inMax}) — fetch/generation failed`);
+    continue;
+  }
+  const processed = androidify(pcm, sampleRate, ANDROID_TREATMENT);
+  // Output oscillation guard: tail (last 10%) must decay far below mid-speech level.
+  const n = processed.length;
+  let midSum = 0;
+  let midC = 0;
+  let tailSum = 0;
+  let tailC = 0;
+  for (let i = 0; i < n; i += 1) {
+    const v = processed[i];
+    if (i >= Math.floor(n * 0.98)) { tailSum += v * v; tailC += 1; }
+    else if (i >= Math.floor(n * 0.3)) { midSum += v * v; midC += 1; }
+  }
+  const tailRms = Math.sqrt(tailSum / Math.max(1, tailC));
+  const midRms = Math.sqrt(midSum / Math.max(1, midC));
+  if (tailRms > midRms * 0.8 && tailRms > 1500) {
+    failures.push(`${key}: DSP output self-oscillates (tail RMS ${Math.round(tailRms)} vs mid ${Math.round(midRms)})`);
+    continue;
+  }
+  const bytes = encodeMp3(processed, sampleRate);
   const file = path.join(outDir, `${key}.mp3`);
   await writeFile(file, bytes);
   const seconds = mp3DurationSeconds(bytes);
   cue[key] = seconds ?? "unknown";
   console.log(
     `[narration] ${key}: ${(bytes.length / 1024).toFixed(1)} KB` +
-      (seconds !== null ? ` ${seconds}s` : " (duration unknown — frame parse failed)"),
+      (seconds !== null ? ` ${seconds}s` : "") +
+      ` (android DSP ok, tail RMS ${Math.round(tailRms)})`,
   );
   // Rate-limit courtesy: small delay between sequential requests.
   await new Promise((resolve) => setTimeout(resolve, 150));
