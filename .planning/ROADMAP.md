@@ -13,7 +13,7 @@ Transform the English-hardcoded Threejs-Punk demo into a natively Malay experien
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: i18n Foundation** - Every UI surface renders in BM by default from a bilingual dictionary store; document lang/title and static head follow (completed 2026-11-23)
-- [ ] **Phase 2: Language Toggle & KL Intro Story** - Instant BM ⇄ EN switch with persistence, plus the KL-cyberpunk intro story rewrite in both languages
+- [x] **Phase 2: Language Toggle & KL Intro Story** - Instant BM ⇄ EN switch with persistence, plus the KL-cyberpunk intro story rewrite in both languages (completed 2026-11-23)
 - [ ] **Phase 3: Malay TTS Narration** - Intro story narrated in Malay, gesture-anchored and robust across browsers (spike-gated)
 - [ ] **Phase 4: Guaranteed Narration Asset** - Bundled pre-synthesized Malay narration guarantees voice everywhere, offline included
 
@@ -57,7 +57,7 @@ Plans:
   3. A first visit always starts in BM regardless of browser language; when the browser language is neither `ms` nor `id`, a dismissible hint suggests switching
   4. The intro story reads as a KL-cyberpunk-flavored BM rewrite (runner, deliveries, corporations, rain-soaked neon KL) — not a literal translation — with a faithful EN counterpart, both living as `intro.*` dictionary keys
   5. A full BM→EN→BM toggle round-trip leaves no English in BM mode and no BM in EN mode (document title and head included)
-**Plans**: 3 plans
+**Plans**: 3/3 plans complete
 Plans:
 **Wave 1**
 - [x] 02-01-PLAN.md — Header BM|EN pill + Tetapan language row with persistence (tracer: activation path)
