@@ -45,6 +45,10 @@ function serveInspectorExtensions() {
 }
 
 export default defineConfig({
+  // GitHub Pages project subpath — built asset URLs resolve under
+  // /cyberpunk-malaya/. Serve dist under that prefix locally, or use
+  // `vite preview`, which respects base.
+  base: "/cyberpunk-malaya/",
   server: {
     host: true,
     open: true,
