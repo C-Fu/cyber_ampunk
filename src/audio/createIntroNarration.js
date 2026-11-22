@@ -80,6 +80,10 @@ export function createIntroNarration({
   let lineIndex = 0;
   let playing = false;
   let source = "asset"; // "asset" | "fallback" | "unavailable"
+  // Once the bundled asset has failed for a line, replay keeps using the
+  // fallback from that line onward — retrying a known-dead asset on every
+  // restart would just churn failures (harden-the-queue, Task 3).
+  let assetFailedAt = null;
   let watchdogTimer = null;
   let disposed = false;
 
@@ -201,6 +205,12 @@ export function createIntroNarration({
   }
 
   function playLine(index) {
+    // Stick to the fallback once an asset failure has been seen at or
+    // before this line (Task 3 hardening).
+    if (assetFailedAt !== null && index >= assetFailedAt) {
+      speakFallback(index);
+      return;
+    }
     onLineChange(index);
     armWatchdog(index);
 
@@ -217,6 +227,8 @@ export function createIntroNarration({
       audioEl.removeEventListener("error", onError);
       // Asset failed to load/play — hand the rest of the queue to the
       // browser TTS fallback starting from this same line (TTS-02).
+      assetFailedAt =
+        assetFailedAt === null ? lineIndex : Math.min(assetFailedAt, lineIndex);
       audioEl.removeAttribute("src");
       speakFallback(lineIndex);
     };
@@ -261,11 +273,11 @@ export function createIntroNarration({
     }
     stop();
     // Replay starts from l01 with the highlight reset in the same frame
-    // (RP-4). Guard: never start audio while muted (MU-3) — the overlay
-    // disables the replay button, but the factory defends too.
+    // (RP-4). assetFailedAt is deliberately NOT reset — a known-dead asset
+    // stays on the fallback path (Task 3 hardening).
     playing = true;
     lineIndex = 0;
-    setSource("asset");
+    setSource(assetFailedAt === null ? "asset" : source);
     playLine(0);
   }
 
