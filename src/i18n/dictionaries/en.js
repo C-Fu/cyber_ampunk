@@ -3,6 +3,15 @@
  * (D-10). Values are the pre-localization hardcoded strings verbatim.
  */
 export const en = {
+  "meta.description": "Walk through a rainy cyberpunk alley powered by WebGPU and Three.js. Neon reflections, cinematic rain, and real-time post-processing in a night city scene. Built with Three.js and TSL by Anderson Mancini and Sunag.",
+  "meta.metaTitle": "Threejs-Punk - Raining scene inspired in CyberPunk by Anderson Mancini and Sunag",
+  "meta.ogDescription": "Walk through a rainy cyberpunk alley powered by WebGPU and Three.js. Neon reflections, cinematic rain, and real-time post-processing in a night city scene.",
+  "meta.ogImageAlt": "Threejs-Punk — raining cyberpunk alley with neon lights and cinematic atmosphere",
+  "meta.ogTitle": "Threejs-Punk - Raining scene inspired in CyberPunk by Anderson Mancini and Sunag",
+  "meta.title": "Threejs-Punk | Raining scene inspired in CyberPunk by Anderson Mancini and Sunag",
+  "meta.twitterDescription": "Walk through a rainy cyberpunk alley powered by WebGPU and Three.js. Neon reflections, cinematic rain, and real-time post-processing in a night city scene.",
+  "meta.twitterImageAlt": "Threejs-Punk — raining cyberpunk alley with neon lights and cinematic atmosphere",
+  "meta.twitterTitle": "Threejs-Punk - Raining scene inspired in CyberPunk by Anderson Mancini and Sunag",
   "walkPrompt.clickToActivate": "Click to activate walk mode",
   "walkPrompt.clickToLook": "Click to look around",
   "walkPrompt.dragToLook": "Drag to look around",

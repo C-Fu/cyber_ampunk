@@ -1,6 +1,7 @@
 import { bm } from "./dictionaries/bm.js";
 import { en } from "./dictionaries/en.js";
 import { isDevEnvironment } from "../platform/userPreferences.js";
+import { applyStaticHead } from "./staticHead.js";
 
 /**
  * Bilingual dictionary store (D-01/D-02): replicates the module-scope
@@ -57,6 +58,7 @@ export function setLanguage(language) {
 
   currentLanguage = language;
   document.documentElement.lang = language === "bm" ? "ms" : "en"; // D-06
+  applyStaticHead();
   notify();
 }
 

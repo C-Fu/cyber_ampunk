@@ -41,6 +41,7 @@ import {
   shouldCompileBeforeRenderLoop,
 } from "./platform/performanceProfile.js";
 import { getStoredLookPreset, isDevelopmentModeEnabled } from "./platform/userPreferences.js";
+import { applyStaticHead } from "./i18n/staticHead.js";
 import {
   DEFAULT_LOOK_PRESET,
   LOOK_PRESETS,
@@ -57,6 +58,7 @@ async function init(loaderOverlay) {
   // Must run before createRenderer so the initial setPixelRatio sees iOS caps.
   applyDevicePerformanceDefaults();
   syncLayoutClass();
+  applyStaticHead();
 
   loaderOverlay.setProgress(0.03);
   loaderOverlay.setStatus("BOOTING SCENE");
