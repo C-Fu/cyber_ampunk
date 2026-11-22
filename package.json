@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "check:i18n": "node scripts/check-i18n-parity.mjs",
+    "check:narration": "node scripts/check-narration-assets.mjs",
     "preview": "vite preview",
     "deploy": "vercel --prod"
   },
