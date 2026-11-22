@@ -30,7 +30,20 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The static `index.html` head (title, meta description) is BM in the raw HTML source before any JS runs
   4. OG/Twitter card meta tags carry BM content
   5. Every migrated string exists in both the BM and EN dictionaries (full parity, ready for the Phase 2 toggle)
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+**Wave 1**
+- [ ] 01-01-PLAN.md — Tracer: i18n store + dictionaries + parity script + walk prompt migration + staticHead boot wiring + dormant EN persistence path
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 01-02-PLAN.md — Leaf factories: loader overlay + distributed status call sites + intro overlay + performance notice + HUD + move hint + audio button
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 01-03-PLAN.md — Composite surfaces: settings panel + about panel (data-i18n walker) + header + walk controls hint (SVG callouts)
+
+**Wave 4** *(blocked on Wave 3 completion)*
+- [ ] 01-04-PLAN.md — Static BM head baseline in index.html + CSS text-expansion sweep + owner BM copy review (D-10) + residual-English audit
+
 **UI hint**: yes
 
 ### Phase 2: Language Toggle & KL Intro Story
