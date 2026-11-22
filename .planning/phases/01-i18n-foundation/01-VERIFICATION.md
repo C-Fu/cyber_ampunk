@@ -1,7 +1,7 @@
 ---
 phase: 01-i18n-foundation
 verified: 2026-11-23T12:00:00Z
-status: human_needed
+status: passed
 score: 7/7 must-haves verified
 covered_files:
   - .planning/phases/01-i18n-foundation/01-01-PLAN.md
