@@ -92,6 +92,15 @@
   text-wrap: balance;
 }
 
+/* S-1 story guard (multi-sentence paragraph): clip overflow instead of
+   scrolling — over-budget copy is shortened at the checkpoint, never scrolled
+   (T-7: `pretty` fallback since 3+ lines makes `balance` unreliable). */
+.intro-container .intro-tagline--story {
+  max-height: 26.5rem;
+  overflow: hidden;
+  text-wrap: pretty;
+}
+
 .intro-actions {
   display: flex;
   justify-content: center;

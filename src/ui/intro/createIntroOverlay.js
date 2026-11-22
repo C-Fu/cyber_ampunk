@@ -1,6 +1,18 @@
 import "./introOverlay.css";
 import gsap from "gsap";
-import { t } from "../../i18n/i18n.js";
+import { t, subscribe } from "../../i18n/i18n.js";
+
+// Per-sentence keys — Phase 3 TTS narration source (D-06). Joined here for
+// the story paragraph; swap to per-sentence spans later is mechanical (S-3).
+const STORY_KEYS = [
+  "intro.story.s1",
+  "intro.story.s2",
+  "intro.story.s3",
+  "intro.story.s4",
+  "intro.story.s5",
+  "intro.story.s6",
+];
+const storyText = () => STORY_KEYS.map((key) => t(key)).join(" ");
 
 function splitIntoLetters(element, className = "intro-letter") {
   const text = element.textContent.trim();
@@ -29,7 +41,7 @@ export function createIntroOverlay({ onStart } = {}) {
         <span class="intro-brand-line intro-brand-line--accent">PUNK</span>
       </h1>
       <p class="intro-rule" aria-hidden="true"></p>
-      <p class="intro-tagline">${t("intro.tagline")}</p>
+      <p class="intro-tagline intro-tagline--story">${storyText()}</p>
       <div class="intro-actions">
         <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
       </div>
@@ -49,6 +61,21 @@ export function createIntroOverlay({ onStart } = {}) {
   const brandLetters = brandLines.flatMap((line) =>
     splitIntoLetters(line, "intro-letter"),
   );
+
+  // D-05/S-4: kicker/story/ENTER only — the brand aria-label and the credit
+  // are fixed brand tokens and must NEVER re-sync (letter-split region stays
+  // untouched; textContent-only, no innerHTML interpolation of t() — T-2-03).
+  function syncText() {
+    kicker.textContent = t("intro.kicker");
+    tagline.textContent = storyText();
+    button.textContent = t("intro.enter");
+  }
+
+  // Page-lifetime subscription (same convention as createHeader.js): the
+  // overlay self-removes in playExit/destroy; the unsubscribe is stored for
+  // future teardown but deliberately never released here.
+  const unsubscribeLanguage = subscribe(syncText);
+  void unsubscribeLanguage;
 
   let started = false;
   let enterTween = null;
