@@ -57,7 +57,16 @@ Plans:
   3. A first visit always starts in BM regardless of browser language; when the browser language is neither `ms` nor `id`, a dismissible hint suggests switching
   4. The intro story reads as a KL-cyberpunk-flavored BM rewrite (runner, deliveries, corporations, rain-soaked neon KL) — not a literal translation — with a faithful EN counterpart, both living as `intro.*` dictionary keys
   5. A full BM→EN→BM toggle round-trip leaves no English in BM mode and no BM in EN mode (document title and head included)
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+**Wave 1**
+- [ ] 02-01-PLAN.md — Header BM|EN pill + Tetapan language row with persistence (tracer: activation path)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 02-02-PLAN.md — KL intro story dictionaries + overlay syncText (owner-review checkpoint)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 02-03-PLAN.md — Language hint toast (trigger/dismiss/persist) wired after revealAppUi
 **UI hint**: yes
 
 ### Phase 3: Malay TTS Narration
