@@ -1,7 +1,8 @@
 ---
 phase: "3"
 slug: "malay-tts-narration"
-status: draft
+status: approved
+reviewed_at: "2026-11-23"
 shadcn_initialized: false
 preset: none
 created: "2026-11-23"
