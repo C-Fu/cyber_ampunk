@@ -1,5 +1,6 @@
 import "./moveHint.css";
 import { isCoarsePointerDevice } from "../../platform/deviceLayout.js";
+import { t, subscribe } from "../../i18n/i18n.js";
 
 const MOVE_HINT_DELAY_MS = 5000;
 
@@ -57,14 +58,22 @@ export function createMoveHint({ walkControls, state } = {}) {
       <div class="move-hint__inner">
         ${renderMiniWasd()}
         <div class="move-hint__copy">
-          <span class="move-hint__kicker">Movement</span>
-          <span class="move-hint__title">Use WASD to walk</span>
+          <span class="move-hint__kicker">${t("moveHint.kicker")}</span>
+          <span class="move-hint__title">${t("moveHint.title")}</span>
         </div>
       </div>
     </div>
   `;
 
   document.body.appendChild(root);
+
+  const kickerEl = root.querySelector(".move-hint__kicker");
+  const titleEl = root.querySelector(".move-hint__title");
+
+  function syncText() {
+    kickerEl.textContent = t("moveHint.kicker");
+    titleEl.textContent = t("moveHint.title");
+  }
 
   let enabled = false;
   let movedThisSession = false;
@@ -185,12 +194,14 @@ export function createMoveHint({ walkControls, state } = {}) {
     }
     onPointerLockChange();
   });
+  const unsubscribeLanguage = subscribe(syncText);
 
   return {
     root,
     setEnabled,
     destroy() {
       clearDelayTimer();
+      unsubscribeLanguage?.();
       unsubscribe?.();
       unsubscribeState?.();
       document.removeEventListener("pointerlockchange", onPointerLockChange);

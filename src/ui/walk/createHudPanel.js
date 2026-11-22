@@ -1,4 +1,5 @@
 import "./hudPanel.css";
+import { t, subscribe } from "../../i18n/i18n.js";
 
 const COMPACT_DELAY_S = 0.6;
 const VITALS_PERCENT = 82;
@@ -87,7 +88,7 @@ export function createHudPanel() {
         <div class="hud-stats">
           <div class="hud-vitals">
             <div class="hud-vitals-header">
-              <span class="hud-label">VITALS</span>
+              <span class="hud-label">${t("hud.vitals")}</span>
               <span class="hud-value">${VITALS_PERCENT}%</span>
             </div>
             <div class="hud-gauge">
@@ -100,12 +101,12 @@ export function createHudPanel() {
           <div class="hud-substats">
             <div class="hud-stat-chip">
               <span class="hud-stat-dot hud-stat-dot--energy"></span>
-              <span class="hud-label">ENERGY</span>
+              <span class="hud-label">${t("hud.energy")}</span>
               <span class="hud-value">64%</span>
             </div>
             <div class="hud-stat-chip">
               <span class="hud-stat-icon">${SIGNAL_WAVE_SVG}</span>
-              <span class="hud-label">SIGNAL</span>
+              <span class="hud-label">${t("hud.signal")}</span>
               <span class="hud-value">98%</span>
             </div>
           </div>
@@ -117,6 +118,21 @@ export function createHudPanel() {
   let walkControls = null;
   let moveTimer = 0;
   let compact = false;
+
+  const vitalsLabel = root.querySelector(".hud-vitals-header .hud-label");
+  const energyLabel = root.querySelector(".hud-stat-dot--energy + .hud-label");
+  const signalLabel = root.querySelector(".hud-stat-icon + .hud-label");
+
+  function syncText() {
+    vitalsLabel.textContent = t("hud.vitals");
+    energyLabel.textContent = t("hud.energy");
+    signalLabel.textContent = t("hud.signal");
+  }
+
+  // No destroy() exists on this factory (created inside createHeader, page
+  // lifetime per research A4) — the subscription is intentionally released
+  // nowhere; nodes persist for the whole page session.
+  subscribe(syncText);
 
   function setCompact(next) {
     if (compact === next) {

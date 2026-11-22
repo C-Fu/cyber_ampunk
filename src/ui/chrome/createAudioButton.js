@@ -5,6 +5,7 @@ import {
   setMusicPlaying,
   subscribe,
 } from "../../audio/audioState.js";
+import { t, subscribe as subscribeLanguage } from "../../i18n/i18n.js";
 
 const DEFAULT_URLS = [
   "/light-rain.mp3",
@@ -54,7 +55,7 @@ export function createAudioButton({ urls = DEFAULT_URLS, url } = {}) {
   root.className = "audio-btn-root audio-btn-root--hidden";
   root.setAttribute("data-ui-block-look", "true");
   root.innerHTML = `
-    <button type="button" id="buttonAudio" class="audio-btn" aria-label="Toggle sound">
+    <button type="button" id="buttonAudio" class="audio-btn" aria-label="${t("audio.toggle")}">
       ${WAVE_SVG}
     </button>
     ${sources.map((src) => `<audio src="${src}"></audio>`).join("")}
@@ -176,6 +177,12 @@ export function createAudioButton({ urls = DEFAULT_URLS, url } = {}) {
     }
   });
 
+  function syncText() {
+    button.setAttribute("aria-label", t("audio.toggle"));
+  }
+
+  const unsubscribeLanguage = subscribeLanguage(syncText);
+
   syncWaveAnimation(getIsMusicPlaying());
 
   for (const eventName of interactionEvents) {
@@ -198,6 +205,7 @@ export function createAudioButton({ urls = DEFAULT_URLS, url } = {}) {
   }
 
   function destroy() {
+    unsubscribeLanguage?.();
     unsubscribe();
     removeInteractionListeners();
     window.removeEventListener("focus", handleFocus);

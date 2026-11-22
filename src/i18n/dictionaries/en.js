@@ -3,6 +3,10 @@
  * (D-10). Values are the pre-localization hardcoded strings verbatim.
  */
 export const en = {
+  "audio.toggle": "Toggle sound",
+  "hud.energy": "ENERGY",
+  "hud.signal": "SIGNAL",
+  "hud.vitals": "VITALS",
   "intro.enter": "ENTER",
   "intro.kicker": "through the glass",
   "intro.tagline": "A rain-soaked alley under neon.",
@@ -28,6 +32,8 @@ export const en = {
   "meta.twitterDescription": "Walk through a rainy cyberpunk alley powered by WebGPU and Three.js. Neon reflections, cinematic rain, and real-time post-processing in a night city scene.",
   "meta.twitterImageAlt": "Threejs-Punk — raining cyberpunk alley with neon lights and cinematic atmosphere",
   "meta.twitterTitle": "Threejs-Punk - Raining scene inspired in CyberPunk by Anderson Mancini and Sunag",
+  "moveHint.kicker": "Movement",
+  "moveHint.title": "Use WASD to walk",
   "performanceNotice.adjusting": "Adjusting performance",
   "walkPrompt.clickToActivate": "Click to activate walk mode",
   "walkPrompt.clickToLook": "Click to look around",
