@@ -1,18 +1,18 @@
 ---
 gsd_state_version: "1.0"
-current_phase: 1
+current_phase: 01
 current_phase_name: i18n Foundation
 status: executing
-stopped_at: Phase 1 UI-SPEC approved
-last_updated: "2026-11-22T16:49:40.328Z"
-last_activity: 2026-11-22
-last_activity_desc: Roadmap created (4 phases, 19/19 v1 requirements mapped)
-state_head: 8e8580cd8c6852e17f8b8615d28d778fe5b5421a
+stopped_at: Completed 01-01-PLAN.md
+last_updated: "2026-11-22T17:06:18.637Z"
+last_activity: 2026-11-23
+last_activity_desc: Phase 01 execution started
+state_head: 5bd51f9ab021ee849ba2929972a75f034a6545d6
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -23,14 +23,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-22)
 
 **Core value:** Every piece of text and the intro narration are presented in Bahasa Melayu by default, with a complete English toggle — the app must feel natively Malay, not translated.
-**Current focus:** Phase 1 — i18n Foundation
+**Current focus:** Phase 01 — i18n Foundation
 
 ## Current Position
 
-Phase: 1 (i18n Foundation) — READY TO EXECUTE
-Plan: 0 of TBD in current phase
+Phase: 01 (i18n Foundation) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-11-22 — Roadmap created (4 phases, 19/19 v1 requirements mapped)
+Last activity: 2026-11-23 — Phase 01 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -52,6 +52,11 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01 P01 | 10min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -62,6 +67,9 @@ Recent decisions affecting current work:
 
 - Roadmap: Zero new dependencies — hand-rolled i18n store (audioState.js pub/sub shape) + Web Speech API; i18next and WASM TTS rejected (research SUMMARY.md)
 - Roadmap: Phase 3 (TTS) is highest-risk — device-matrix spike must be the first plan in that phase, before the narration pipeline
+- [Phase 01]: D-02 store shape implemented verbatim for i18n: Set listeners, notify({language}), guard+notify setLanguage, subscribe with immediate sync (01-01)
+- [Phase 01]: setStoredLanguage landed unused by design (dormant D-05 path; Phase 2 toggle consumes it) so userPreferences.js is touched once in phase 01 (01-01)
+- [Phase 01]: BM meta.description authored at 159 chars to hold the 160-char budget C-4 (01-01)
 
 ### Pending Todos
 
@@ -82,6 +90,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-22T14:53:27.258Z
-Stopped at: Phase 1 UI-SPEC approved
-Resume file: .planning/phases/01-i18n-foundation/01-UI-SPEC.md
+Last session: 2026-11-22T17:06:11.218Z
+Stopped at: Completed 01-01-PLAN.md
+Resume file: None
