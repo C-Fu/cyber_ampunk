@@ -9,6 +9,7 @@ export function createIntroFlow({
   loaderOverlay,
   revealAppUi,
   world,
+  showLanguageHintToast,
 }) {
   let rainGlassIntro = null;
   let introActive = false;
@@ -60,6 +61,10 @@ export function createIntroFlow({
         notice.destroy();
         renderer.domElement.style.pointerEvents = "auto";
         revealAppUi();
+        // LANG-04 (TO-10): hint toast fires right after app UI reveal. The
+        // closure is DI'd from main.js; the toast guards itself (TO-3) and
+        // stays inert when the guard fails — safe under optional chaining.
+        showLanguageHintToast?.();
       },
     });
 

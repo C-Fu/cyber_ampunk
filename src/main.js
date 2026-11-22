@@ -8,6 +8,10 @@ import { createLoaderOverlay } from "./app/createLoaderOverlay.js";
 import { createAppShell } from "./app/createAppShell.js";
 import { createIntroFlow } from "./app/createIntroFlow.js";
 import {
+  createLanguageHintToast,
+  shouldShowHint,
+} from "./ui/chrome/createLanguageHintToast.js";
+import {
   createCamera,
   createCameraLayoutSync,
   cameraParams,
@@ -227,6 +231,16 @@ async function init(loaderOverlay) {
       adaptiveSampleGate.allow = true;
     },
     world,
+    // LANG-04: the toast guards itself (TO-3) and never shows when the
+    // guard fails; creation-time t() only (TO-8).
+    showLanguageHintToast: () => {
+      const toast = createLanguageHintToast();
+      if (shouldShowHint()) {
+        toast.show();
+      } else {
+        toast.destroy();
+      }
+    },
   });
 
   const renderLoop = createRenderLoop({
