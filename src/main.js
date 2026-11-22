@@ -263,7 +263,7 @@ async function init(loaderOverlay) {
   function setupNarration(introOverlay) {
     const narration = createIntroNarration({
       keys: narrationKeys,
-      getSourceUrl: (nn) => `/audio/narration/l${nn}.mp3`,
+      getSourceUrl: (nn) => `${import.meta.env.BASE_URL}audio/narration/l${nn}.mp3`,
       getT: (key) => t(key),
       cueDurations: narrationCue?.cue ?? null,
       onLineChange: (index) => introOverlay.setStoryHighlight(index),
