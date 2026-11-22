@@ -1,6 +1,7 @@
 const DEVELOPMENT_MODE_KEY = "threejs-punk-development-mode";
 const LOOK_PRESET_KEY = "threejs-punk-look-preset";
 const LANGUAGE_KEY = "threejs-punk-language";
+const LANGUAGE_HINT_DISMISSED_KEY = "threejs-punk-lang-hint-dismissed";
 
 let developmentModeEnabled = false;
 
@@ -57,6 +58,28 @@ export function setStoredLanguage(language) {
       localStorage.setItem(LANGUAGE_KEY, language);
     } else {
       localStorage.removeItem(LANGUAGE_KEY);
+    }
+  } catch {
+    // localStorage may be unavailable
+  }
+}
+
+// Note: the hint-dismissed flag is intentionally NOT cleared by
+// clearAllStoredPreferences — a dismissed hint is not a config (TO-4).
+export function getLanguageHintDismissed() {
+  try {
+    return localStorage.getItem(LANGUAGE_HINT_DISMISSED_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setLanguageHintDismissed(dismissed) {
+  try {
+    if (dismissed) {
+      localStorage.setItem(LANGUAGE_HINT_DISMISSED_KEY, "1");
+    } else {
+      localStorage.removeItem(LANGUAGE_HINT_DISMISSED_KEY);
     }
   } catch {
     // localStorage may be unavailable
