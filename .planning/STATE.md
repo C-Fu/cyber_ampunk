@@ -3,16 +3,16 @@ gsd_state_version: "1.0"
 current_phase: 01
 current_phase_name: i18n Foundation
 status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-11-22T17:16:39.631Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-11-22T17:27:34.483Z"
 last_activity: 2026-11-23
 last_activity_desc: Phase 01 execution started
-state_head: ec8930fd0a9b43c282e6bcdc2f101e9acca3920c
+state_head: 1f4f774cadf26714aaad351fe3414ee59bdc6408
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-11-22)
 ## Current Position
 
 Phase: 01 (i18n Foundation) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-11-23 — Phase 01 execution started
 
@@ -58,6 +58,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 01 P01 | 10min | 3 tasks | 9 files |
 | Phase 01 P02 | 5min | 3 tasks | 11 files |
+| Phase 01 P03 | 9min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,9 @@ Recent decisions affecting current work:
 - [Phase 01]: BM meta.description authored at 159 chars to hold the 160-char budget C-4 (01-01)
 - [Phase 01]: Loader statuses pass translated display text at call time (setStatus(t(key))) — signature untouched; createAudioButton aliases i18n subscribe to avoid audioState export collision (01-02)
 - [Phase 01]: createHudPanel subscribes page-lifetime without destroy (no destroy exists; created inside createHeader — research A4, explicit code comment) (01-02)
+- [Phase 01]: Look preset labels resolve at render time via t("look." + option.id) — createAppShell.js LOOK_OPTIONS stays data-only; syncText re-derives labels from button.dataset.lookPreset
+- [Phase 01]: data-i18n walker (D-04) proven on HTML (about panel) and SVG text nodes (walk controls callouts): querySelectorAll('[data-i18n]') -> textContent only; data-i18n-aria variant covers aria-label re-sync
+- [Phase 01]: Header subscribes page-lifetime storing but never releasing the unsubscribe (no destroy exists — research A4, explicit code comment); no destroy added just for i18n (01-03)
 
 ### Pending Todos
 
@@ -93,6 +97,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-11-22T17:16:39.574Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-11-22T17:27:34.419Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
