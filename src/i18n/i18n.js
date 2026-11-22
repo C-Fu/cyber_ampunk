@@ -1,6 +1,9 @@
 import { bm } from "./dictionaries/bm.js";
 import { en } from "./dictionaries/en.js";
-import { isDevEnvironment } from "../platform/userPreferences.js";
+import {
+  isDevEnvironment,
+  getStoredLanguage,
+} from "../platform/userPreferences.js";
 import { applyStaticHead } from "./staticHead.js";
 
 /**
@@ -13,6 +16,16 @@ const DICTIONARIES = { bm, en };
 const listeners = new Set();
 
 let currentLanguage = "bm";
+
+// Dormant EN restore path (D-05): nothing writes the stored language in
+// Phase 1, so users always boot BM. When a stored "en" preference exists
+// (Phase 2 toggle), swap the language and refresh the head BEFORE any
+// listener exists — notify() is a no-op with zero listeners.
+if (getStoredLanguage() === "en") {
+  currentLanguage = "en";
+  document.documentElement.lang = "en";
+  applyStaticHead();
+}
 
 function notify() {
   for (const listener of listeners) {

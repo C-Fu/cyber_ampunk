@@ -1,5 +1,6 @@
 const DEVELOPMENT_MODE_KEY = "threejs-punk-development-mode";
 const LOOK_PRESET_KEY = "threejs-punk-look-preset";
+const LANGUAGE_KEY = "threejs-punk-language";
 
 let developmentModeEnabled = false;
 
@@ -36,6 +37,26 @@ export function setStoredLookPreset(presetId) {
       localStorage.setItem(LOOK_PRESET_KEY, presetId);
     } else {
       localStorage.removeItem(LOOK_PRESET_KEY);
+    }
+  } catch {
+    // localStorage may be unavailable
+  }
+}
+
+export function getStoredLanguage() {
+  try {
+    return localStorage.getItem(LANGUAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setStoredLanguage(language) {
+  try {
+    if (language) {
+      localStorage.setItem(LANGUAGE_KEY, language);
+    } else {
+      localStorage.removeItem(LANGUAGE_KEY);
     }
   } catch {
     // localStorage may be unavailable
