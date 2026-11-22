@@ -79,26 +79,87 @@
   transform-origin: center;
 }
 
-.intro-container .intro-tagline {
+/* Owner-directed story treatment (D-07): the full-length ~49-line narrative
+   replaced the 6-sentence draft, so the ST-4 <=460-char budget no longer
+   applies. The story renders as a fixed-height window whose inner wrapper
+   auto-scrolls upward credits-style (owner: "slowly scroll up"). The window
+   height keeps kicker/brand/ENTER/credit visible and clickable at 1080p and
+   360px; the button sits outside the scrolling region (pointer events intact). */
+.intro-container {
+  /* Story window height — shared by the container and the scroll keyframes
+     so the animation ends holding the last lines inside the window. */
+  --intro-story-h: clamp(7.5rem, 22vh, 13rem);
+}
+
+.intro-container .intro-story {
   margin: 0 0 1.75rem;
-  max-width: 22rem;
+  width: min(22rem, 100%);
+  height: var(--intro-story-h);
+  overflow: hidden;
+  /* Fade top/bottom edges so lines drift out cinematically. */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.intro-container .intro-story-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+  animation: intro-story-scroll 100s linear both;
+  will-change: transform;
+}
+
+.intro-container .intro-story-line {
+  margin: 0;
   font-family: "Orbitron", sans-serif;
   font-weight: 400;
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  line-height: 1.35;
+  font-size: clamp(0.78rem, 1.7vw, 0.95rem);
+  line-height: 1.45;
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.9);
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.5);
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
-/* S-1 story guard (multi-sentence paragraph): clip overflow instead of
-   scrolling — over-budget copy is shortened at the checkpoint, never scrolled
-   (T-7: `pretty` fallback since 3+ lines makes `balance` unreliable). */
-.intro-container .intro-tagline--story {
-  max-height: 26.5rem;
-  overflow: hidden;
-  text-wrap: pretty;
+@keyframes intro-story-scroll {
+  from {
+    transform: translateY(0);
+  }
+  /* Scroll the full wrapper height minus the window height: the story's
+     beginning scrolls up and out, and `both` fill holds the last lines
+     ("Inilah kisahku." / "This is my story.") inside the window at the end. */
+  to {
+    transform: translateY(calc(-100% + var(--intro-story-h)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-container .intro-story-scroll {
+    /* No auto-scroll: show the opening lines statically instead. */
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-container {
+    --intro-story-h: clamp(6.5rem, 26vh, 10rem);
+  }
+
+  .intro-container .intro-story {
+    width: min(16.5rem, 100%);
+  }
 }
 
 .intro-actions {
@@ -162,10 +223,6 @@
 @media (max-width: 480px) {
   .intro-brand-line {
     font-size: clamp(2.35rem, 14vw, 3.4rem);
-  }
-
-  .intro-tagline {
-    max-width: 16.5rem;
   }
 
   .intro-credit {

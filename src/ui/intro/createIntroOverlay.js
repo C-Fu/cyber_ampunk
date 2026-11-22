@@ -2,17 +2,12 @@ import "./introOverlay.css";
 import gsap from "gsap";
 import { t, subscribe } from "../../i18n/i18n.js";
 
-// Per-sentence keys — Phase 3 TTS narration source (D-06). Joined here for
-// the story paragraph; swap to per-sentence spans later is mechanical (S-3).
-const STORY_KEYS = [
-  "intro.story.s1",
-  "intro.story.s2",
-  "intro.story.s3",
-  "intro.story.s4",
-  "intro.story.s5",
-  "intro.story.s6",
-];
-const storyText = () => STORY_KEYS.map((key) => t(key)).join(" ");
+// Per-line keys — the owner's full-length BM story verbatim (D-07), one key
+// per non-empty line (l01..l49). Phase 3 TTS narration source (D-06). Each
+// line renders as its own paragraph inside the scrolling story region.
+const STORY_KEYS = Array.from({ length: 49 }, (_, i) =>
+  `intro.story.l${String(i + 1).padStart(2, "0")}`,
+);
 
 function splitIntoLetters(element, className = "intro-letter") {
   const text = element.textContent.trim();
@@ -41,7 +36,9 @@ export function createIntroOverlay({ onStart } = {}) {
         <span class="intro-brand-line intro-brand-line--accent">PUNK</span>
       </h1>
       <p class="intro-rule" aria-hidden="true"></p>
-      <p class="intro-tagline intro-tagline--story">${storyText()}</p>
+      <div class="intro-story" aria-live="off">
+        <div class="intro-story-scroll"></div>
+      </div>
       <div class="intro-actions">
         <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
       </div>
@@ -53,7 +50,8 @@ export function createIntroOverlay({ onStart } = {}) {
   const kicker = root.querySelector(".intro-kicker");
   const brandLines = [...root.querySelectorAll(".intro-brand-line")];
   const rule = root.querySelector(".intro-rule");
-  const tagline = root.querySelector(".intro-tagline");
+  const story = root.querySelector(".intro-story");
+  const storyScroll = root.querySelector(".intro-story-scroll");
   const credit = root.querySelector(".intro-credit");
 
   document.body.appendChild(root);
@@ -62,12 +60,37 @@ export function createIntroOverlay({ onStart } = {}) {
     splitIntoLetters(line, "intro-letter"),
   );
 
+  // Story lines are built with createElement/textContent only — no
+  // innerHTML interpolation of t() output (T-2-03, D-04). Every line is its
+  // own <p>; NEVER letter-split the story (D-05).
+  function renderStory() {
+    storyScroll.textContent = "";
+    for (const key of STORY_KEYS) {
+      const line = document.createElement("p");
+      line.className = "intro-story-line";
+      line.textContent = t(key);
+      storyScroll.appendChild(line);
+    }
+    // Rebuild restarts the scroll from the top on language switch.
+    restartStoryScroll();
+  }
+
+  // Credits-style slow upward auto-scroll on the inner wrapper (owner
+  // direction: "slowly scroll up"). Pure CSS animation — no render-loop
+  // coupling; the GSAP timelines keep tweening the container box untouched.
+  function restartStoryScroll() {
+    storyScroll.style.animation = "none";
+    // Force a reflow so re-assigning the animation name restarts it.
+    void storyScroll.offsetHeight;
+    storyScroll.style.animation = "";
+  }
+
   // D-05/S-4: kicker/story/ENTER only — the brand aria-label and the credit
   // are fixed brand tokens and must NEVER re-sync (letter-split region stays
   // untouched; textContent-only, no innerHTML interpolation of t() — T-2-03).
   function syncText() {
     kicker.textContent = t("intro.kicker");
-    tagline.textContent = storyText();
+    renderStory();
     button.textContent = t("intro.enter");
   }
 
@@ -88,7 +111,7 @@ export function createIntroOverlay({ onStart } = {}) {
     filter: "blur(8px)",
   });
   gsap.set(rule, { scaleX: 0, opacity: 0 });
-  gsap.set(tagline, { opacity: 0, y: 14 });
+  gsap.set(story, { opacity: 0, y: 14 });
   gsap.set(button, { opacity: 0, y: 10 });
   gsap.set(credit, { opacity: 0, y: 8 });
 
@@ -128,7 +151,7 @@ export function createIntroOverlay({ onStart } = {}) {
         "-=0.55",
       )
       .to(
-        tagline,
+        story,
         {
           opacity: 1,
           y: 0,
