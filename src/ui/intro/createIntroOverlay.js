@@ -41,7 +41,7 @@ export function createIntroOverlay({
         <span class="intro-brand-line intro-brand-line--accent">CYBER_AMPUNK</span>
       </h1>
       <p class="intro-rule" aria-hidden="true"></p>
-      <div class="intro-story" aria-live="off">
+      <div class="intro-story" aria-live="off" style="opacity:0">
         <div class="intro-story-scroll"></div>
       </div>
       <p class="intro-source-label" aria-live="off"></p>
@@ -342,6 +342,7 @@ export function createIntroOverlay({
         // whole narration run. The ENTER button fades and becomes inert
         // (replay takes over, RP-1).
         story.classList.add("intro-story--narrating");
+        story.style.opacity = "";
         exitTween = gsap
           .timeline({
             onComplete: () => {
