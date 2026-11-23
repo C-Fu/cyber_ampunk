@@ -8,6 +8,28 @@
     />
     <meta name="theme-color" content="#000000" />
     <link rel="icon" href="data:," />
+    <script>
+      // Boot-error reporter: if any module/init error kills the app before
+      // the loader mounts, surface it visibly (otherwise a black page gives
+      // zero diagnostic information).
+      (function () {
+        function show(label, detail) {
+          var d = document.createElement("div");
+          d.style.cssText =
+            "position:fixed;top:0;left:0;right:0;background:#1a0a0a;color:#f88;" +
+            "z-index:99999;font:11px/1.5 monospace;padding:8px 12px;" +
+            "white-space:pre-wrap;word-break:break-all";
+          d.textContent = label + ": " + detail;
+          (document.body || document.documentElement).appendChild(d);
+        }
+        window.addEventListener("error", function (e) {
+          show("BOOT-ERROR", (e.message || "") + " @ " + (e.filename || "") + ":" + (e.lineno || ""));
+        });
+        window.addEventListener("unhandledrejection", function (e) {
+          show("BOOT-REJECTION", String((e.reason && e.reason.stack) || e.reason));
+        });
+      })();
+    </script>
 
     <title>Cyber_Ampunk | Game hujan siberpunk oleh Adri 'C-Fu'</title>
     <meta
