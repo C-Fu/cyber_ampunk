@@ -85,6 +85,8 @@ export function createIntroNarration({
   // restart would just churn failures (harden-the-queue, Task 3).
   let assetFailedAt = null;
   let watchdogTimer = null;
+  // Generation token for per-line playback handlers (see playLine).
+  let playGeneration = 0;
   let disposed = false;
 
   function setSource(next) {
@@ -214,23 +216,32 @@ export function createIntroNarration({
     onLineChange(index);
     armWatchdog(index);
 
+    // Generation token: bumped on every playLine. Stale handlers from an
+    // aborted prior play check it and no-op — this kills the race where a
+    // rejected play() from line N fired onError with line M's index,
+    // poisoning the queue into permanent fallback (boot-deploy bug, 2026-11-23).
+    const generation = ++playGeneration;
+
     audioEl.src = getSourceUrl(zeroPad(index));
 
     const onEnded = () => {
+      if (generation !== playGeneration) return;
       audioEl.removeEventListener("ended", onEnded);
       audioEl.removeEventListener("error", onError);
       clearWatchdog();
       advance(1);
     };
     const onError = () => {
+      if (generation !== playGeneration) return;
+      console.error("[narr] asset error line", index, "media:", audioEl.error ? audioEl.error.code + ":" + (audioEl.error.message||"") : "no-media-error", "netState:", audioEl.networkState, "readyState:", audioEl.readyState);
       audioEl.removeEventListener("ended", onEnded);
       audioEl.removeEventListener("error", onError);
       // Asset failed to load/play — hand the rest of the queue to the
       // browser TTS fallback starting from this same line (TTS-02).
       assetFailedAt =
-        assetFailedAt === null ? lineIndex : Math.min(assetFailedAt, lineIndex);
+        assetFailedAt === null ? index : Math.min(assetFailedAt, index);
       audioEl.removeAttribute("src");
-      speakFallback(lineIndex);
+      speakFallback(index);
     };
 
     audioEl.addEventListener("ended", onEnded);
@@ -238,7 +249,15 @@ export function createIntroNarration({
 
     const playPromise = audioEl.play();
     if (playPromise) {
-      playPromise.catch(() => {
+      playPromise.catch((err) => {
+        // AbortError = the src was swapped by advance() while this play()
+        // was still resolving — the line finished or moved on; NOT an asset
+        // failure. Treating it as one poisoned the queue from a later line
+        // (stale onError ran with the CURRENT lineIndex) and permanently
+        // routed every remaining line to the fallback.
+        if (err?.name === "AbortError") {
+          return;
+        }
         onError();
       });
     }

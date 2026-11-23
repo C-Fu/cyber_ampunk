@@ -28,7 +28,7 @@ export const bm = {
   "header.source": "Sumber",
   "header.sourceAria": "Kod sumber",
   "intro.enter": "MASUK",
-  "intro.kicker": "bawah hujan neon",
+  "intro.kicker": "DI_BAWAH_HUJAN_NEON",
   "intro.story.l01": "Kuala Lumpur. 03:00.",
   "intro.story.l02": "Monsun menghentam kota tanpa belas. Hujan turun seperti gangguan digital, mengaburkan cahaya neon yang membanjiri jalanan. Ungu. Sian. Merah amaran. Seluruh bandar kelihatan seperti mimpi yang rosak.",
   "intro.story.l03": "Aku seorang Ghost Runner.",

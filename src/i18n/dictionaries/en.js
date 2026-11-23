@@ -27,7 +27,7 @@ export const en = {
   "header.source": "SOURCE",
   "header.sourceAria": "Source code",
   "intro.enter": "ENTER",
-  "intro.kicker": "beneath the neon rain",
+  "intro.kicker": "BENEATH_THE_NEON_RAIN",
   "intro.story.l01": "Kuala Lumpur. 03:00.",
   "intro.story.l02": "The monsoon hammers the city without mercy. Rain falls like digital static, blurring the neon light flooding the streets. Purple. Cyan. Warning red. The whole city looks like a broken dream.",
   "intro.story.l03": "I am a Ghost Runner.",

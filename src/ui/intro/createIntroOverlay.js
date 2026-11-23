@@ -37,9 +37,8 @@ export function createIntroOverlay({
   root.innerHTML = `
     <div class="intro-stack">
       <p class="intro-kicker">${t("intro.kicker")}</p>
-      <h1 class="intro-brand" aria-label="THREEJS-PUNK">
-        <span class="intro-brand-line">THREEJS</span>
-        <span class="intro-brand-line intro-brand-line--accent">PUNK</span>
+      <h1 class="intro-brand" aria-label="CYBERPUNK_MALAYA">
+        <span class="intro-brand-line intro-brand-line--accent">CYBERPUNK_MALAYA</span>
       </h1>
       <p class="intro-rule" aria-hidden="true"></p>
       <div class="intro-story" aria-live="off">

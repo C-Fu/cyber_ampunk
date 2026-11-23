@@ -316,9 +316,14 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-const cuePath = path.join(".planning/phases/03-malay-tts-narration", "narration-cue.json");
+const cuePath = path.join("public/audio/narration", "narration-cue.json");
 await mkdir(path.dirname(cuePath), { recursive: true });
 await writeFile(cuePath, `${JSON.stringify(cue, null, 2)}\n`);
 const total = Object.values(cue).reduce((sum, v) => (typeof v === "number" ? sum + v : sum), 0);
+await writeFile(
+  path.join(".planning/phases/03-malay-tts-narration", "narration-cue.json"),
+  `${JSON.stringify(cue, null, 2)}
+`,
+);
 console.log(`[narration] ${wantedKeys.length} file(s) written to ${outDir} (voice ${voice}).`);
 console.log(`[narration] cue map -> ${cuePath} (total ${total.toFixed(1)}s of measured speech).`);
