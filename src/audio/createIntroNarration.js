@@ -233,7 +233,6 @@ export function createIntroNarration({
     };
     const onError = () => {
       if (generation !== playGeneration) return;
-      console.error("[narr] asset error line", index, "media:", audioEl.error ? audioEl.error.code + ":" + (audioEl.error.message||"") : "no-media-error", "netState:", audioEl.networkState, "readyState:", audioEl.readyState);
       audioEl.removeEventListener("ended", onEnded);
       audioEl.removeEventListener("error", onError);
       // Asset failed to load/play — hand the rest of the queue to the
