@@ -47,14 +47,12 @@ export function createIntroOverlay({
       <p class="intro-source-label" aria-live="off"></p>
       <div class="intro-actions">
         <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
-        <button type="button" class="intro-replay-button" aria-label="${t("intro.voice.replay")}" disabled>${phosphorArrowCounterClockwise}</button>
       </div>
       <p class="intro-credit">://BY ADRI 'C-FU'</p>
     </div>
   `;
 
   const button = root.querySelector(".intro-button");
-  const replayButton = root.querySelector(".intro-replay-button");
   const sourceLabel = root.querySelector(".intro-source-label");
   const kicker = root.querySelector(".intro-kicker");
   const brandLines = [...root.querySelectorAll(".intro-brand-line")];
@@ -98,16 +96,6 @@ export function createIntroOverlay({
       narrationSource === "unavailable",
     );
     sourceLabel.classList.toggle("intro-source-label--muted", narrationMuted);
-  }
-
-  // R-1/MU-3: replay disabled-quiet (opacity 0.4) while muted, finished, or
-  // fallback-failed; enabled while narration is running. Never shows broken.
-  function renderReplayState() {
-    const canReplay =
-      !narrationMuted &&
-      narrationSource !== "idle" &&
-      narrationSource !== "unavailable";
-    replayButton.disabled = !canReplay;
   }
 
   // setNarrationSource from the narration module's onSourceChange callback
@@ -162,9 +150,6 @@ export function createIntroOverlay({
     button.textContent = t("intro.enter");
     // SL-4: label + aria re-derive from language and source state.
     renderSourceLabel();
-    if (narrationSource !== "idle") {
-      replayButton.setAttribute("aria-label", t("intro.voice.replay"));
-    }
     // Language switch during playback stops narration and clears the
     // highlight (Pitfall 6 — no EN audio exists per D-02, simplest correct
     // behavior). Rebind the highlight targets after the rebuild (HL-4).
@@ -236,7 +221,6 @@ export function createIntroOverlay({
   gsap.set(rule, { scaleX: 0, opacity: 0 });
   gsap.set(story, { opacity: 0, y: 14 });
   gsap.set(button, { opacity: 0, y: 10 });
-  gsap.set(replayButton, { opacity: 0, y: 10 });
   gsap.set(sourceLabel, { opacity: 0 });
   gsap.set(credit, { opacity: 0, y: 8 });
 
@@ -293,16 +277,6 @@ export function createIntroOverlay({
         "-=0.25",
       )
       .to(
-        replayButton,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "-=0.45",
-      )
-      .to(
         sourceLabel,
         {
           // SL-1 idle: present but quiet — animated in to 0.45, then the
@@ -339,7 +313,7 @@ export function createIntroOverlay({
         story.style.opacity = "";
         // Owner direction: the scroll starts ~2s AFTER the voice begins, so the
         // story follows the narration instead of leading it.
-        setTimeout(() => restartStoryScroll(), 2000);
+        setTimeout(() => restartStoryScroll(), 1500);
         exitTween = gsap
           .timeline({
             onComplete: () => {
@@ -389,19 +363,6 @@ export function createIntroOverlay({
 
   button.addEventListener("click", handleStart);
 
-  function handleReplayClick() {
-    if (replayButton.disabled) {
-      return;
-    }
-    // RP-4: restart from l01 — highlight resets to line 1 in the same frame
-    // (the narration module's onLineChange drives it) and the scroll
-    // restarts via restartStoryScroll.
-    restartStoryScroll();
-    onReplay?.();
-  }
-
-  replayButton.addEventListener("click", handleReplayClick);
-
   return {
     root,
     playEnter,
@@ -415,7 +376,6 @@ export function createIntroOverlay({
       enterTween?.kill();
       exitTween?.kill();
       button.removeEventListener("click", handleStart);
-      replayButton.removeEventListener("click", handleReplayClick);
       root.remove();
     },
   };
