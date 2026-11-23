@@ -233,6 +233,7 @@ export function createIntroNarration({
     };
     const onError = () => {
       if (generation !== playGeneration) return;
+
       audioEl.removeEventListener("ended", onEnded);
       audioEl.removeEventListener("error", onError);
       // Asset failed to load/play — hand the rest of the queue to the

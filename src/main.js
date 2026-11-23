@@ -55,8 +55,10 @@ import {
 } from "./post/look/cyberpunkLook.js";
 
 const STORY_LINE_COUNT = 49;
+// Shipped with the build (public/) — the .planning/ source path is
+// repo-only and 404s on the deployed site.
 const NARRATION_CUE_URL =
-  ".planning/phases/03-malay-tts-narration/narration-cue.json";
+  `${import.meta.env.BASE_URL}audio/narration/narration-cue.json`;
 
 // Load the per-line cue durations map (Task 3 / carried decision: audio
 // drives scroll length). Returns null on any missing or non-numeric
