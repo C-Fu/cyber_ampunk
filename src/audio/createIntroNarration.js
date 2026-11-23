@@ -340,6 +340,7 @@ export function createIntroNarration({
     start,
     stop,
     restart,
+    resume,
     dispose() {
       disposed = true;
       unsubscribe();
