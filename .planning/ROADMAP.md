@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: i18n Foundation** - Every UI surface renders in BM by default from a bilingual dictionary store; document lang/title and static head follow (completed 2026-11-23)
 - [x] **Phase 2: Language Toggle & KL Intro Story** - Instant BM ⇄ EN switch with persistence, plus the KL-cyberpunk intro story rewrite in both languages (completed 2026-11-23)
 - [x] **Phase 3: Malay TTS Narration** - Intro story narrated in Malay, gesture-anchored and robust across browsers (spike-gated) — plans complete, pending end-of-phase human verify (completed 2026-11-23)
-- [ ] **Phase 4: Guaranteed Narration Asset** - Bundled pre-synthesized Malay narration guarantees voice everywhere, offline included
+- [x] **Phase 4: Guaranteed Narration Asset** - MERGED into Phase 3 per owner decision — delivered as part of the narration work (bundled audio is the primary source)
 
 ## Phase Details
 
@@ -108,4 +108,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. i18n Foundation | 4/4 | Complete    | 2026-11-23 |
 | 2. Language Toggle & KL Intro Story | 3/3 | Complete | 2026-11-23 |
 | 3. Malay TTS Narration | 2/2 | Complete    | 2026-11-23 |
-| 4. Guaranteed Narration Asset | 0/TBD | Not started | - |
+| 4. Guaranteed Narration Asset | merged | Complete (merged into Phase 3) | 2026-11-23 |
