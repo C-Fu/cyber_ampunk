@@ -106,13 +106,11 @@ export function createIntroOverlay({
       narrationMuted = muted;
     }
     renderSourceLabel();
-    renderReplayState();
   }
 
   function setNarrationMuted(muted) {
     narrationMuted = muted;
     renderSourceLabel();
-    renderReplayState();
   }
 
   function renderStory() {
