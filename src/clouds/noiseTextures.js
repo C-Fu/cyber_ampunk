@@ -1,7 +1,7 @@
 import * as THREE from "three/webgpu";
 
-const NOISE_URL = "/custom_noise.webp";
-const PERLIN_URL = "/custom_perlin.webp";
+const NOISE_URL = `${import.meta.env.BASE_URL}custom_noise.webp`;
+const PERLIN_URL = `${import.meta.env.BASE_URL}custom_perlin.webp`;
 
 function configureNoiseTexture(texture) {
   texture.wrapS = THREE.RepeatWrapping;

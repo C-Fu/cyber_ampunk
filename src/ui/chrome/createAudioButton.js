@@ -8,9 +8,9 @@ import {
 import { t, subscribe as subscribeLanguage } from "../../i18n/i18n.js";
 
 const DEFAULT_URLS = [
-  "/light-rain.mp3",
-  "/night-ambience.mp3",
-  "/thunderstorm.mp3",
+  `${import.meta.env.BASE_URL}light-rain.mp3`,
+  `${import.meta.env.BASE_URL}night-ambience.mp3`,
+  `${import.meta.env.BASE_URL}thunderstorm.mp3`,
 ];
 
 const WAVE_SVG = `
