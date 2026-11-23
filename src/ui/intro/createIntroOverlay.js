@@ -49,7 +49,7 @@ export function createIntroOverlay({
         <button type="button" class="intro-button" disabled>${t("intro.enter")}</button>
         <button type="button" class="intro-replay-button" aria-label="${t("intro.voice.replay")}" disabled>${phosphorArrowCounterClockwise}</button>
       </div>
-      <p class="intro-credit">Adri 'C-Fu'</p>
+      <p class="intro-credit">://BY ADRI 'C-FU'</p>
     </div>
   `;
 
@@ -336,9 +336,12 @@ export function createIntroOverlay({
       enterTween?.kill();
       exitTween?.kill();
       if (keepStory) {
-        // Narration mode: fade only the surrounding chrome; the story
-        // window stays for the whole narration run. The ENTER button fades
-        // and becomes inert (replay takes over, RP-1).
+        // Narration mode: reveal the story window (it was hidden pre-ENTER
+        // per owner direction — appears + scrolls only after MASUK) and
+        // fade only the surrounding chrome. The story window stays for the
+        // whole narration run. The ENTER button fades and becomes inert
+        // (replay takes over, RP-1).
+        story.classList.add("intro-story--narrating");
         exitTween = gsap
           .timeline({
             onComplete: () => {

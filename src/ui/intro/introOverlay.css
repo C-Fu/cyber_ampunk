@@ -98,6 +98,12 @@
 }
 
 .intro-container .intro-story {
+  /* Owner direction 2026-11-23: the story appears + scrolls ONLY after
+     MASUK. Hidden (opacity 0, paused animation) until the overlay gains
+     the .intro-story--narrating state set by playExit(keepStory). */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
   /* Owner direction 2026-11-23 (revised): pin the story window to the
      BROWSER's bottom-right corner — absolutely positioned within the
      fixed intro container, outside the centered stack flow. */
@@ -126,12 +132,23 @@
   );
 }
 
+.intro-container .intro-story--narrating {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.intro-container .intro-story--narrating .intro-story-scroll {
+  animation-play-state: running;
+}
+
 .intro-container .intro-story-scroll {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.9em;
+  /* Paused until .intro-story--narrating is set (post-MASUK). */
   animation: intro-story-scroll var(--intro-story-dur, 100s) linear both;
+  animation-play-state: paused;
   will-change: transform;
 }
 
