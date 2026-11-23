@@ -275,16 +275,10 @@ export function createIntroOverlay({
         },
         "-=0.55",
       )
-      .to(
-        story,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.75,
-          ease: "power2.out",
-        },
-        "-=0.4",
-      )
+      // NOTE: the story element is deliberately NOT tweened here — it stays
+      // hidden (inline opacity:0) until MASUK, then playExit(keepStory)
+      // reveals it via .intro-story--narrating for the narration run
+      // (owner direction 2026-11-23).
       .to(
         button,
         {
