@@ -1,2 +1,2 @@
 export const SOURCE_CODE_URL =
-  "https://github.com/C-Fu/cyberpunk-malaya";
+  "https://github.com/C-Fu/cyber-ampunk";
