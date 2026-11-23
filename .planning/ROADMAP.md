@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: i18n Foundation** - Every UI surface renders in BM by default from a bilingual dictionary store; document lang/title and static head follow (completed 2026-11-23)
 - [x] **Phase 2: Language Toggle & KL Intro Story** - Instant BM ⇄ EN switch with persistence, plus the KL-cyberpunk intro story rewrite in both languages (completed 2026-11-23)
-- [ ] **Phase 3: Malay TTS Narration** - Intro story narrated in Malay, gesture-anchored and robust across browsers (spike-gated) — plans complete, pending end-of-phase human verify
+- [x] **Phase 3: Malay TTS Narration** - Intro story narrated in Malay, gesture-anchored and robust across browsers (spike-gated) — plans complete, pending end-of-phase human verify (completed 2026-11-23)
 - [ ] **Phase 4: Guaranteed Narration Asset** - Bundled pre-synthesized Malay narration guarantees voice everywhere, offline included
 
 ## Phase Details
@@ -80,7 +80,7 @@ Plans:
   3. Toggling the audio button / mute cancels narration immediately
   4. Voice resolution follows the graded chain (local `ms` → network `ms-MY` → labeled `id-ID` → text-only), the UI always labels which voice is active, and the experience never silently mispronounces — text-only is the floor
   5. The currently-spoken sentence is highlighted in the intro overlay, and a replay button restarts the narration
-**Plans**: 2/2 plans executed
+**Plans**: 2/2 plans complete
 Plans:
 **Wave 1**
 - [x] 03-01-PLAN.md — Offline narration asset pipeline: synthesis script + integrity gate + owner Azure-provision/ear-review checkpoint (VOICE-01/02)
@@ -107,5 +107,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. i18n Foundation | 4/4 | Complete    | 2026-11-23 |
 | 2. Language Toggle & KL Intro Story | 3/3 | Complete | 2026-11-23 |
-| 3. Malay TTS Narration | 1/2 | In Progress | - |
+| 3. Malay TTS Narration | 2/2 | Complete    | 2026-11-23 |
 | 4. Guaranteed Narration Asset | 0/TBD | Not started | - |

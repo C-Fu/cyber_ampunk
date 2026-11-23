@@ -1,19 +1,19 @@
 ---
 gsd_state_version: "1.0"
-current_phase: 3
-current_phase_name: Malay TTS Narration
-status: executing
-stopped_at: Phase 3 plans complete — awaiting human verify
-last_updated: "2026-11-23T00:00:00.000Z"
+current_phase: 4
+current_phase_name: "Guaranteed Narration Asset — MERGED INTO PHASE 3 (owner decision 2026-11-23: bundled audio is the primary narration source, built directly in Phase 3)"
+status: planning
+stopped_at: Phase 3 complete, ready to plan Phase 4
+last_updated: "2026-11-23T12:47:36.114Z"
 last_activity: 2026-11-23
-last_activity_desc: Phase 3 03-02 narration playback complete
-state_head: 7e16fc74336629fcf7c2bb43d5d286114828455f
+last_activity_desc: Phase 3 complete, transitioned to Phase 4
+state_head: c6d03c9f31c00737304030a3da78d0ffd7bfdd20
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 9
   completed_plans: 9
-  percent: 88
+  percent: 75
 ---
 
 # Project State
@@ -27,17 +27,17 @@ See: .planning/PROJECT.md (updated 2026-11-22)
 
 ## Current Position
 
-Phase: 3 (Malay TTS Narration) — READY TO EXECUTE
-Plan: 2 of 2 complete (Phase 3 plans executed)
-Status: Awaiting end-of-phase human verify
-Last activity: 2026-11-23 — 03-02 narration playback wiring complete
+Phase: 4 — Guaranteed Narration Asset — MERGED INTO PHASE 3 (owner decision 2026-11-23: bundled audio is the primary narration source, built directly in Phase 3)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-11-23 — Phase 3 complete, transitioned to Phase 4
 
-Progress: [█████░░░░░] 50%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 9
 - Average duration: -
 - Total execution time: -
 
@@ -47,7 +47,7 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 1 | 4 | - | - |
 | 2 | 3 | - | - |
-| 3 | 2 | ~40min | ~20min |
+| 3 | 2 | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -115,5 +115,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-11-22T21:48:56.484Z
-Stopped at: Phase 3 UI-SPEC approved
+Stopped at: Phase 3 complete, ready to plan Phase 4
 Resume file: .planning/phases/03-malay-tts-narration/03-UI-SPEC.md
