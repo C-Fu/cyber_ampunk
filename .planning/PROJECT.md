@@ -54,6 +54,16 @@ Every piece of text and the intro narration are presented in Bahasa Melayu by de
 - User preferences already persist to `localStorage` (`src/platform/userPreferences.js`) — language choice should follow the same pattern.
 - Story flavor: KL cyberpunk — a runner making deliveries across the alley, corporations, rain-soaked neon KL. The current intro story text needs a BM rewrite in this flavor, not a literal translation of the English.
 
+## Current State
+
+**v1 shipped 2026-11-23.** The full experience — Bahasa Melayu default UI, KL-cyberpunk intro story with android-voice narration, BM/EN toggle — is live at https://c-fu.github.io/cyber_ampunk/. Milestone v1 archived in .planning/milestones/v1-ROADMAP.md.
+
+## Next Milestone Goals (v2 candidates — owner-recorded)
+
+- Car driving (Ghost Runner ride): scripted spline ride first, real driving later
+- Missions / upstream-parity features, leveraging this fork's differentiator (BM localization + narration layer the upstream lacks)
+- Possible TTS-06 replay affordance restoration (retired at v1 close)
+
 ## Constraints
 
 - **Tech stack**: Three.js from `three/webgpu` + `three/tsl`, TSL node materials, no custom GLSL — project hard constraint from `AGENTS.md`

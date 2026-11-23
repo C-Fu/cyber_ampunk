@@ -1,0 +1,111 @@
+# Roadmap: Cyberpunk Malaya
+
+## Overview
+
+Transform the English-hardcoded Threejs-Punk demo into a natively Malay experience: first every UI surface renders in Bahasa Melayu from a bilingual dictionary store, then users get an instant BM ⇄ EN toggle and a KL-cyberpunk intro story rewrite, then the story is spoken aloud via a device-robust Malay TTS pipeline (spike-gated), and finally a pre-synthesized narration asset guarantees the voice works on every device — online or offline. The dependency chain is strict: dictionary → toggle/story → narration script → voice, with all platform TTS risk isolated in the last two phases so a failure there can never destabilize the shipped localization.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [x] **Phase 1: i18n Foundation** - Every UI surface renders in BM by default from a bilingual dictionary store; document lang/title and static head follow (completed 2026-11-23)
+- [x] **Phase 2: Language Toggle & KL Intro Story** - Instant BM ⇄ EN switch with persistence, plus the KL-cyberpunk intro story rewrite in both languages (completed 2026-11-23)
+- [x] **Phase 3: Malay TTS Narration** - Intro story narrated in Malay, gesture-anchored and robust across browsers (spike-gated) — plans complete, pending end-of-phase human verify (completed 2026-11-23)
+- [x] **Phase 4: Guaranteed Narration Asset** - MERGED into Phase 3 per owner decision — delivered as part of the narration work (bundled audio is the primary source)
+
+## Phase Details
+
+### Phase 1: i18n Foundation
+**Goal**: Every user-facing surface renders in Bahasa Melayu by default, backed by a hand-rolled bilingual dictionary store — no framework, no render-loop changes
+**Mode:** mvp
+**Depends on**: Nothing (first phase)
+**Requirements**: LOC-01, LOC-03, LOC-04, LOC-05, LANG-03
+**Success Criteria** (what must be TRUE):
+  1. On first visit, every UI surface — header, settings, about, intro overlay, walk hints, HUD, virtual joystick, walk prompt, performance notice, loader overlay, loader statuses — renders in BM with zero leftover English strings
+  2. `document.documentElement.lang` is `"ms"` and `document.title` is in BM
+  3. The static `index.html` head (title, meta description) is BM in the raw HTML source before any JS runs
+  4. OG/Twitter card meta tags carry BM content
+  5. Every migrated string exists in both the BM and EN dictionaries (full parity, ready for the Phase 2 toggle)
+**Plans**: 4/4 plans complete
+Plans:
+**Wave 1**
+- [x] 01-01-PLAN.md — Tracer: i18n store + dictionaries + parity script + walk prompt migration + staticHead boot wiring + dormant EN persistence path
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [x] 01-02-PLAN.md — Leaf factories: loader overlay + distributed status call sites + intro overlay + performance notice + HUD + move hint + audio button
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [x] 01-03-PLAN.md — Composite surfaces: settings panel + about panel (data-i18n walker) + header + walk controls hint (SVG callouts)
+
+**Wave 4** *(blocked on Wave 3 completion)*
+- [x] 01-04-PLAN.md — Static BM head baseline in index.html + CSS text-expansion sweep + owner BM copy review (D-10) + residual-English audit
+
+**UI hint**: yes
+
+### Phase 2: Language Toggle & KL Intro Story
+**Goal**: Users can switch BM ⇄ EN instantly with a persisted choice, and the intro tells a KL cyberpunk story written natively in both languages
+**Mode:** mvp
+**Depends on**: Phase 1
+**Requirements**: LOC-02, LANG-01, LANG-02, LANG-04, INTRO-01, INTRO-02
+**Success Criteria** (what must be TRUE):
+  1. User can toggle "BM | EN" in the header/settings area and all visible UI re-renders instantly — no reload, no appShell teardown
+  2. The language choice persists to localStorage and is restored on the next visit
+  3. A first visit always starts in BM regardless of browser language; when the browser language is neither `ms` nor `id`, a dismissible hint suggests switching
+  4. The intro story reads as a KL-cyberpunk-flavored BM rewrite (runner, deliveries, corporations, rain-soaked neon KL) — not a literal translation — with a faithful EN counterpart, both living as `intro.*` dictionary keys
+  5. A full BM→EN→BM toggle round-trip leaves no English in BM mode and no BM in EN mode (document title and head included)
+**Plans**: 3/3 plans complete
+Plans:
+**Wave 1**
+- [x] 02-01-PLAN.md — Header BM|EN pill + Tetapan language row with persistence (tracer: activation path)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [x] 02-02-PLAN.md — KL intro story dictionaries + overlay syncText (owner replaced story; credits auto-scroll; fork URL identity)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [x] 02-03-PLAN.md — Language hint toast (trigger/dismiss/persist) wired after revealAppUi
+**UI hint**: yes
+
+### Phase 3: Malay Narration (merged: TTS + bundled audio per owner decision 2026-11-23)
+**Goal**: The full ~49-line Ghost Runner story is narrated in Malay from the ENTER click, synced to the story scroll with per-line highlighting, using a bundled pre-synthesized neural voice as the primary source (owner chose bundled-audio-now, merging former Phase 4)
+**Mode:** mvp
+**Depends on**: Phase 2
+**Requirements**: TTS-01, TTS-03, TTS-05, TTS-06, VOICE-01, VOICE-02 (TTS-02/TTS-04 browser-TTS queue/voice-chain demoted: bundled audio is the primary source; browser TTS remains only as an emergency fallback if the asset fails to load)
+**Success Criteria** (what must be TRUE):
+  1. Narration starts automatically from the ENTER-button click and never speaks before a user gesture
+  2. The complete story is narrated without truncation — sentence-sized utterances chained via `onend`, immune to the ~15 s Chrome/Safari cutoff, with a watchdog recovering from hung queues
+  3. Toggling the audio button / mute cancels narration immediately
+  4. Voice resolution follows the graded chain (local `ms` → network `ms-MY` → labeled `id-ID` → text-only), the UI always labels which voice is active, and the experience never silently mispronounces — text-only is the floor
+  5. The currently-spoken sentence is highlighted in the intro overlay, and a replay button restarts the narration
+**Plans**: 2/2 plans complete
+Plans:
+**Wave 1**
+- [x] 03-01-PLAN.md — Offline narration asset pipeline: synthesis script + integrity gate + owner Azure-provision/ear-review checkpoint (VOICE-01/02)
+
+**Wave 2** *(blocked on Wave 1 — owner-approved assets + shared intro overlay files)*
+- [x] 03-02-PLAN.md — Narration playback module: gesture-anchored start, keepStory exit, per-line highlight, mute integration, replay button, source label, TTS fallback, scroll tuning (TTS-01..06)
+**UI hint**: yes
+
+### Phase 4: Guaranteed Narration Asset — MERGED INTO PHASE 3 (owner decision 2026-11-23: bundled audio is the primary narration source, built directly in Phase 3)
+**Goal**: Merged — see Phase 3
+**Mode:** mvp
+**Depends on**: Phase 2 (via Phase 3)
+**Requirements**: none (VOICE-01/VOICE-02 moved to Phase 3)
+**Success Criteria**: see Phase 3
+**Plans**: none — merged
+**UI hint**: yes
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. i18n Foundation | 4/4 | Complete    | 2026-11-23 |
+| 2. Language Toggle & KL Intro Story | 3/3 | Complete | 2026-11-23 |
+| 3. Malay TTS Narration | 2/2 | Complete    | 2026-11-23 |
+| 4. Guaranteed Narration Asset | merged | Complete (merged into Phase 3) | 2026-11-23 |

@@ -1,5 +1,6 @@
 ---
 gsd_state_version: "1.0"
+closeout_type: override_closeout
 current_phase: 4
 current_phase_name: "Guaranteed Narration Asset — MERGED INTO PHASE 3 (owner decision 2026-11-23: bundled audio is the primary narration source, built directly in Phase 3)"
 status: planning
@@ -111,6 +112,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 | Feature | TTS-07 dynamic narration beyond intro | v2 requirement | 2026-11-22 | v1 |
 | Feature | Enter/drive the car (Ghost Runner ride) — owner request 2026-11-23; upstream shipped this as "Threejs-Punk Drive" (Rapier physics, 50+ missions, 4-driver multiplayer) which is NOT in this fork's codebase; v2 candidate: scripted spline ride first, real driving later | v2 candidate | 2026-11-23 | v1 |
 | Feature | Upstream parity features (missions, racing, multiplayer) — tracked as v2+ candidates; this fork's differentiator is the BM localization layer the upstream lacks | v2 candidate | 2026-11-23 | v1 |
+
+| UAT | 01-UAT.md — passed, 0 pending scenarios (acknowledged at v1 close: passed items, verdict-preserving) | acknowledged | 2026-11-23 | v1 |
+| UAT | 02-UAT.md — passed, 0 pending scenarios (acknowledged at v1 close) | acknowledged | 2026-11-23 | v1 |
+| UAT | 03-UAT.md — passed, 0 pending scenarios (acknowledged at v1 close) | acknowledged | 2026-11-23 | v1 |
 
 ## Session Continuity
 
