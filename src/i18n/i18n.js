@@ -24,7 +24,13 @@ let currentLanguage = "bm";
 if (getStoredLanguage() === "en") {
   currentLanguage = "en";
   document.documentElement.lang = "en";
-  applyStaticHead();
+  // Defer applyStaticHead to a microtask: this module init runs INSIDE the
+  // i18n.js <-> staticHead.js import cycle, and calling it synchronously here
+  // reaches staticHead's bindings while they are still in the TDZ (boot crash
+  // for stored-EN visitors). After module evaluation completes, the bindings
+  // are live. (applyStaticHead touches only static DOM state; no listener
+  // ordering concerns — notify() is a no-op this early either way.)
+  queueMicrotask(() => applyStaticHead());
 }
 
 function notify() {

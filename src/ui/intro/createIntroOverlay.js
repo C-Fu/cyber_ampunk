@@ -175,14 +175,18 @@ export function createIntroOverlay({
   // Page-lifetime subscription (same convention as createHeader.js): the
   // overlay self-removes in playExit/destroy; the unsubscribe is stored for
   // future teardown but deliberately never released here.
-  const unsubscribeLanguage = subscribe(syncText);
-  void unsubscribeLanguage;
-
   // TTS-05 highlight: exactly zero-or-one active line (HL-2). index === null
   // clears the highlight (story end, mute, HL-3). Targets are the live
   // storyLineEls array, so a renderStory() rebuild is picked up on the next
   // call; the current index is re-applied instantly after rebuilds (HL-4).
+  // NOTE: must be declared BEFORE subscribe(syncText) — subscribe fires
+  // syncText immediately (audioState contract), and renderStory ->
+  // rebindStoryHighlight reads this binding; a later declaration put it in
+  // the TDZ during the first immediate sync (boot crash for every visitor).
   let activeLineIndex = null;
+
+  const unsubscribeLanguage = subscribe(syncText);
+  void unsubscribeLanguage;
 
   function setStoryHighlight(index) {
     activeLineIndex =
