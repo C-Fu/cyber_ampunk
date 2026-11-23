@@ -4,7 +4,7 @@ verified: 2026-11-23T12:00:00Z
 status: passed
 score: 6/10 must-haves verified
 covered_files: [".planning/phases/03-malay-tts-narration/03-01-PLAN.md", ".planning/phases/03-malay-tts-narration/03-01-SUMMARY.md", ".planning/phases/03-malay-tts-narration/03-02-PLAN.md", ".planning/phases/03-malay-tts-narration/03-02-SUMMARY.md", "package.json", "scripts/check-narration-assets.mjs", "scripts/synthesize-narration.mjs", "src/app/createIntroFlow.js", "src/audio/createIntroNarration.js", "src/i18n/dictionaries/bm.js", "src/i18n/dictionaries/en.js", "src/main.js", "src/ui/intro/createIntroOverlay.js", "src/ui/intro/introOverlay.css"]
-covered_digest: "v4:sha256:1997fba596f88064cf95869d628d11346f77e8f80f848fa703e9025d61df064b"
+covered_digest: "v4:sha256:215f7f64d2aea84c8e7ebb8222b0b5399b0d767f0fed11fd1a6c4ae5aef99203"
 behavior_unverified: 4
 overrides_applied: 0
 behavior_unverified_items:
@@ -45,7 +45,7 @@ human_verification:
 
 **Phase Goal:** The full ~49-line Ghost Runner story is narrated in Malay from the ENTER click, synced to the intro story scroll with per-line highlighting, using a bundled pre-synthesized neural ms-MY audio asset as the primary narration source
 **Verified:** 2026-11-23
-**Status:** human_needed (all automated checks pass; audio runtime behaviors routed to human per 03-VALIDATION.md)
+**Status:** passed (owner confirmed all pass 2026-11-23 — post-verify fixes: unmute-resume, replay removal, playEnter tween removal, scroll delay all verified)
 **Re-verification:** No — initial verification
 
 ## Goal Achievement
