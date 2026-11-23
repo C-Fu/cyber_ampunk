@@ -33,7 +33,7 @@
 - [x] **TTS-03**: Toggling the audio button / mute cancels narration immediately (WCAG 1.4.2 compliant)
 - [x] **TTS-04**: (simplified per owner decision) Primary narration source is the bundled pre-synthesized ms-MY neural audio; the UI labels the active narration source; browser TTS is emergency fallback only
 - [x] **TTS-05**: The currently-spoken sentence is highlighted in the intro overlay, synced to the narration queue
-- [x] **TTS-06**: A replay button on the intro overlay restarts the narration
+- [x] **TTS-06**: Replay button on the intro overlay — RETIRED by owner decision (2026-11-23): replay button removed from UI; requirement satisfied by implementation then intentionally withdrawn
 
 ### Voice Fallback Asset
 
