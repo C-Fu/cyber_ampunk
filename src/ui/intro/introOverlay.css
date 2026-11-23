@@ -98,12 +98,13 @@
 }
 
 .intro-container .intro-story {
-  /* Owner direction 2026-11-23: story sits bottom-right of the intro,
-     right-aligned — not centered. align-self pins it to the stack's
-     right edge; text-align right-aligns the drifting lines. */
-  margin: 0 0 1.75rem;
-  margin-left: auto;
-  align-self: flex-end;
+  /* Owner direction 2026-11-23 (revised): pin the story window to the
+     BROWSER's bottom-right corner — absolutely positioned within the
+     fixed intro container, outside the centered stack flow. */
+  position: absolute;
+  right: clamp(1.25rem, 4vw, 3rem);
+  bottom: clamp(1.25rem, 6vh, 3rem);
+  margin: 0;
   text-align: right;
   width: min(24rem, 100%);
   height: var(--intro-story-h);
