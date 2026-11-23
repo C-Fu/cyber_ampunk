@@ -28,7 +28,7 @@ export function createAboutPanel({ state } = {}) {
       <div class="about-body">
         <div class="about-brand">
           <!-- Brand name threejs-punk stays hardcoded in both languages (Pitfall 3). -->
-          <p class="about-brand-title">THREEJS-PUNK</p>
+          <p class="about-brand-title">CYBERPUNK_MALAYA</p>
           <small class="about-brand-subtitle">BY ADRI 'C-FU'</small>
         </div>
         <div class="about-copy">
