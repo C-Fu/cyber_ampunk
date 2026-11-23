@@ -280,6 +280,11 @@ async function init(loaderOverlay) {
     // read of audioState — narration never writes music state (TTS-03).
     const unsubscribeMute = subscribe(({ isMusicPlaying }) => {
       introOverlay.setNarrationMuted(!isMusicPlaying);
+      // Owner direction 2026-11-23: un-muting after mute restarts the
+      // narration (mute stops it; unmute resumes from the stopped line).
+      if (isMusicPlaying) {
+        narration.resume();
+      }
     });
     narration._unsubscribeMute = unsubscribeMute;
     return {

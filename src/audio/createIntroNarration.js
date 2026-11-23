@@ -70,6 +70,7 @@ export function createIntroNarration({
       start() {},
       stop() {},
       restart() {},
+      resume() {},
       dispose() {},
     };
   }
@@ -79,6 +80,7 @@ export function createIntroNarration({
 
   let lineIndex = 0;
   let playing = false;
+  let started = false;
   let source = "asset"; // "asset" | "fallback" | "unavailable"
   // Once the bundled asset has failed for a line, replay keeps using the
   // fallback from that line onward — retrying a known-dead asset on every
@@ -268,6 +270,7 @@ export function createIntroNarration({
       return;
     }
     playing = true;
+    started = true;
     lineIndex = 0;
     setSource("asset");
     // Called synchronously inside the ENTER gesture handler (Pitfall 2):
@@ -298,6 +301,25 @@ export function createIntroNarration({
     lineIndex = 0;
     setSource(assetFailedAt === null ? "asset" : source);
     playLine(0);
+  }
+
+  // Resume after unmute (owner direction 2026-11-23: mute stops narration,
+  // un-muting starts it again). Continues from the stopped line — lineIndex
+  // is preserved by stop(). No-op before ENTER (never started).
+  function resume() {
+    if (disposed || playing) {
+      return;
+    }
+    if (!started || lineIndex >= keys.length) {
+      return;
+    }
+    playing = true;
+    setSource(assetFailedAt === null ? "asset" : source);
+    if (source === "fallback") {
+      speakFallback(lineIndex);
+    } else {
+      playLine(lineIndex);
+    }
   }
 
   // --- TTS-03 mute trap: one-way read-only subscription. On mute the

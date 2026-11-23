@@ -343,6 +343,9 @@ export function createIntroOverlay({
         // (replay takes over, RP-1).
         story.classList.add("intro-story--narrating");
         story.style.opacity = "";
+        // Owner direction: the scroll starts ~2s AFTER the voice begins, so the
+        // story follows the narration instead of leading it.
+        setTimeout(() => restartStoryScroll(), 2000);
         exitTween = gsap
           .timeline({
             onComplete: () => {
